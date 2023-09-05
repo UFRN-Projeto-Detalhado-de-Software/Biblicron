@@ -1,0 +1,98 @@
+name: Teste
+description: Criar uma nova tarefa de controle de qualidade.
+labels: ["quality"]
+body:
+  - type: input
+    id: related_issue_id
+    attributes:
+      label: Id Tarefa
+      description: Indique o **id** da tarefa ou bug correspondente, se houver.
+    validations:
+      required: false
+  - type: textarea
+    id: quality_description
+    attributes:
+      label: Descrição
+      description: Por favor, descreva a tarefa de qualidade.
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: "## Métricas de Qualidade"
+  - type: markdown
+    attributes:
+      value: "### Considere as seguintes orientações durante a verificação."
+  - type: markdown
+    attributes:
+      value: "- Todas as declarações não utilizadas devem ser removidas."
+  - type: markdown
+    attributes:
+      value: "- Os nomes para variáveis, parâmetros, métodos, classes, etc, devem seguir a convenção da linguagem de programação utilizada."
+  - type: markdown
+    attributes:
+      value: "- Se um mesmo trecho de código está sendo usado mais de uma vez, deve se extrair um método ou função."
+  - type: markdown
+    attributes:
+      value: "- Verifique se o código está claro de forma a ser entendido por outros desenvolvedores."
+  - type: markdown
+    attributes:
+      value: "- Sempre que adequado, o tratamento de exceção deve ser implementado."
+  - type: markdown
+    attributes:
+      value: "- Os métodos ou funções devem ter uma única responsabilidade e usar pouco código (no máximo 50 linhas)."
+  - type: markdown
+    attributes:
+      value: "- É boa prática escrever comentários para melhorar legibildade do código."
+  - type: markdown
+    attributes:
+      value: "- Se aplicável, os modificadores de acesso devem ser utilizados corretamente."
+  - type: markdown
+    attributes:
+      value: "### O membro da equipe de qualidade que validar e verificar esta tarefa deve responder às questões a seguir."
+  - type: dropdown
+    id: issue_legilibility
+    attributes:
+      label: Legilibidade (indique 1 para Baixa, 2 para Média, 3 para Alta)
+      description: "O código escrito para resolver esta tarefa está legível? O código deve ser fácil de ler e entender, ter sintaxe clara, sem abreviações confusas e com um estilo de codificação consistente. Indique 1 para legibilidade Baixa, 2 para legibilidade Média, 3 para legibilidade Alta."
+      options:
+        - 1
+        - 2
+        - 3
+  - type: dropdown
+    id: issue_simplicity
+    attributes:
+      label: Simplicidade (indique 1 para Baixa, 2 para Média, 3 para Alta)
+      description: "O código escrito para resolver esta tarefa está simples e conciso? Indique 1 para simplicidade Baixa, 2 para simplicidade Média, 3 para simplicidade Alta."
+      options:
+        - 1
+        - 2
+        - 3
+  - type: dropdown
+    id: issue_modularity
+    attributes:
+      label: Modularidade (indique 1 para Não se Aplica, 2 para Baixa, 3 para Média, 4 para Alta)
+      description: "O código escrito para resolver esta tarefa está dividido em módulos ou funções independentes? Cada função ou módulo deve ter uma responsabilidade clara e bem definida. Indique 1 para 'Não se aplica', 2 para modularidade Baixa, 3 para modularidade Média, 4 para modularidade Alta."
+      options:
+        - 1
+        - 2
+        - 3
+        - 4
+  - type: dropdown
+    id: issue_confiability
+    attributes:
+      label: Confiabilidade (indique 1 para Não se Aplica, 2 para Baixa, 3 para Média, 4 para Alta)
+      description: "O código escrito para resolver esta tarefa lida adequadamente com erros e exceções? As exceções devem retornar mensagens claras e informativas quando ocorrerem. Indique 1 para 'Não se aplica', 2 para confiabilidade Baixa, 3 para confiabilidade Média, 4 para confiabilidade Alta."
+      options:
+        - 1
+        - 2
+        - 3
+        - 4
+  - type: dropdown
+    id: issue_overall_quality
+    attributes:
+      label: Qualidade Geral (indique 1 para Baixa, 2 para Média, 3 para Alta)
+      description: "Qual a qualidade geral da tarefa ou bug verificado? Indique 1 para qualidade Baixa, 2 para qualidade Média, 3 para qualidade Alta."
+      options:
+        - 1
+        - 2
+        - 3

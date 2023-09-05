@@ -1,0 +1,118 @@
+name: Tarefa
+description: Criar uma nova tarefa.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: issue_description
+    attributes:
+      label: Descrição
+      description: Por favor, descreva a tarefa.
+    validations:
+      required: true
+  - type: input
+    id: issue_estimation
+    attributes:
+      label: Estimativa (em horas; apenas inteiros)
+      description: Quantas horas você estima para terminar esta tarefa?
+    validations:
+      required: false
+  - type: input
+    id: issue_time_spent
+    attributes:
+      label: Tempo Gasto (em horas; apenas inteiros)
+      description: Quantas horas você gastou (aproximadamente) para terminar esta tarefa?
+    validations:
+      required: false
+  - type: dropdown
+    id: issue_complexity
+    attributes:
+      label: Complexidade (escolha 1 para Baixa, 2 para Média e 3 para Alta)
+      description: Quão complexa é esta tarefa? Escolha 1 para Baixa, 2 para Média e 3 para Alta.
+      options:
+        - 1
+        - 2
+        - 3
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: "## Ao concluir o desenvolvimento desta tarefa, responda:"
+  - type: textarea
+    id: issue_not_finished_cause
+    attributes:
+      label: "Você terminou esta tarefa? Se não, por quê?"
+      description: "Responda apenas se você **não** conseguiu terminar esta tarefa."
+  # - type: markdown
+  #   attributes:
+  #     value: "## Emoções"
+  # - type: markdown
+  #   attributes:
+  #     value: "### Ao final do desenvolvimento da tarefa, indique as emoções a seguir baseado na estrutura de emoções de Shaver et al. (disponível em https://doi.org/10.1037//0022-3514.52.6.1061)"
+  # - type: markdown
+  #   attributes:
+  #     value: "### Por favor, indique as emoções baseado em caráter pessoal, não necessariamente (mas também) relacionado à tarefa. Considere o que está sentindo no momento."
+  # - type: dropdown
+  #   id: issue_emotions_love
+  #   attributes:
+  #     label: Amor
+  #     description: "Até que ponto você está experimentando sentimentos de **amor** neste momento? Exemplos de sentimentos relacionados ao amor: **compaixão**, **carinho**, **afeto** e **excitação**. Indique 1 para 'Nem um pouco', 2 para 'Ligeiramente', 3 para 'Moderadamente', 4 para 'Bastante' e 5 para 'Extremamente'."
+  #     options:
+  #       - 1 - Nem um pouco
+  #       - 2 - Ligeiramente
+  #       - 3 - Moderadamente
+  #       - 4 - Bastante
+  #       - 5 - Extremamente
+  #   validations:
+  #     required: true
+  # - type: dropdown
+  #   id: issue_emotions_joy
+  #   attributes:
+  #     label: Alegria
+  #     description: "Até que ponto você está experimentando sentimentos de **alegria** neste momento? Exemplos de sentimentos relacionados a alegria: **felicidade**, **satisfação**, **prazer**, **euforia**, **entusiasmo**, **otimismo** e **orgulho**. Indique 1 para 'Nem um pouco', 2 para 'Ligeiramente', 3 para 'Moderadamente', 4 para 'Bastante' e 5 para 'Extremamente'."
+  #     options:
+  #       - 1 - Nem um pouco
+  #       - 2 - Ligeiramente
+  #       - 3 - Moderadamente
+  #       - 4 - Bastante
+  #       - 5 - Extremamente
+  #   validations:
+  #     required: true
+  # - type: dropdown
+  #   id: issue_emotions_anger
+  #   attributes:
+  #     label: Raiva
+  #     description: "Até que ponto você está experimentando sentimentos de **raiva** neste momento? Exemplos de sentimentos relationados a raiva: **agitação**, **frustração**, **ódio**, **indignação** e **inveja**. Indique 1 para 'Nem um pouco', 2 para 'Ligeiramente', 3 para 'Moderadamente', 4 para 'Bastante' e 5 para 'Extremamente'."
+  #     options:
+  #       - 1 - Nem um pouco
+  #       - 2 - Ligeiramente
+  #       - 3 - Moderadamente
+  #       - 4 - Bastante
+  #       - 5 - Extremamente
+  #   validations:
+  #     required: true
+  # - type: dropdown
+  #   id: issue_emotions_sadness
+  #   attributes:
+  #     label: Tristeza
+  #     description: "Até que ponto você está experimentando sentimentos de **tristeza** neste momento? Exemplos de sentimentos relationados a tristeza: **angústia**, **tristeza**, **depressão**, **vergonha** e **insegurança**. Indique 1 para 'Nem um pouco', 2 para 'Ligeiramente', 3 para 'Moderadamente', 4 para 'Bastante' e 5 para 'Extremamente'."
+  #     options:
+  #       - 1 - Nem um pouco
+  #       - 2 - Ligeiramente
+  #       - 3 - Moderadamente
+  #       - 4 - Bastante
+  #       - 5 - Extremamente
+  #   validations:
+  #     required: true
+  # - type: dropdown
+  #   id: issue_emotions_fear
+  #   attributes:
+  #     label: Medo
+  #     description: "Até que ponto você está experimentando sentimentos de **medo** neste momento? Exemplos de sentimentos relationados ao medo: **susto**, **pânico**, **nervosismo**, **ansiedade**, **aflição**, **preocupação** e **apreensão**. Indique 1 para 'Nem um pouco', 2 para 'Ligeiramente', 3 para 'Moderadamente', 4 para 'Bastante' e 5 para 'Extremamente'."
+  #     options:
+  #       - 1 - Nem um pouco
+  #       - 2 - Ligeiramente
+  #       - 3 - Moderadamente
+  #       - 4 - Bastante
+  #       - 5 - Extremamente
+  #   validations:
+  #     required: true
