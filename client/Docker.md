@@ -1,2 +1,7 @@
-sudo docker build --tag angular-client .
-sudo docker run --name angular-client -p 4200:4200 -v $(pwd):/angular-client -it angular-client
+## Executar com Docker
+
+Primeiro execute `npm install`.
+
+Segungo execute `sudo docker build --tag angular-client`.
+
+Por último, execute `sudo docker run --name angular -p 4200:4200 -v $(pwd):/angular-client -it angular`.
