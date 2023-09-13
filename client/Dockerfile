@@ -4,10 +4,8 @@ COPY . /client
 
 WORKDIR /client
 
-RUN npm install -g npm@10.1.0
+RUN npm install -g @angular/cli
 
-RUN npm install
+CMD ["ng", "serve", "--open"]
 
-RUN npm install -g @angular/cli@latest
-
-CMD ng serve --host 0.0.0.0
+EXPOSE 4200

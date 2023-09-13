@@ -1,36 +1,86 @@
 package edu.ufrn.imd.Biblicron.controller;
 
+import edu.ufrn.imd.Biblicron.dto.LivroDto;
 import edu.ufrn.imd.Biblicron.model.Livro;
-import edu.ufrn.imd.Biblicron.repository.ILivroRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import edu.ufrn.imd.Biblicron.service.LivroService;
+import org.apache.catalina.mbeans.MBeanUtils;
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/livros")
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RequestMapping("/livro")
 public class LivroController {
-    @Autowired
-    private ILivroRepository livroRepository;
+    final LivroService livroService;
 
-    @GetMapping
-    public List<Livro> listarLivros() {
-        return livroRepository.findAll();
+    public LivroController(LivroService livroService) {
+        this.livroService = livroService;
     }
 
     @PostMapping
-    public void adicionarLivro() {
-        // Cria um novo livro com atributos específicos
-        Livro novoLivro = new Livro();
-        novoLivro.setTitulo("O Nome do Vento");
-        novoLivro.setAutor("Patrick Rothfuss");
-        // Defina outros atributos, se necessário
+    public ResponseEntity<Object> saveLivro(@RequestBody @Valid LivroDto livroDto){
+        if(livroService.existsByTitulo(livroDto.getTitulo())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Book Title is already in use.");
+        }
 
-        // Insere o novo livro no banco de dados usando o método save()
-        livroRepository.save(novoLivro);
+        var livro = new Livro();
+        try {
+            BeanUtils.copyProperties(livro, livroDto);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(livroService.save(livro));
     }
 
+    @GetMapping
+    public ResponseEntity<List<Livro>> getAllLivros(){
+        return ResponseEntity.status(HttpStatus.OK).body(livroService.findAll());
+    }
 
-    // Implemente outros métodos de controle conforme necessário (atualizar, excluir, buscar por ID, etc.).
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getLivroById(@PathVariable(value = "id") Long id){
+        Optional<Livro> livroOptional = livroService.findById(id);
+        if(!livroOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(livroOptional.get());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteLivro(@PathVariable(value = "id") Long id){
+        Optional<Livro> livroOptional = livroService.findById(id);
+        if(!livroOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
+        }
+        livroService.delete(livroOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Book of id " + id + " deleted successfully.");
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateLivro(@PathVariable(value = "id") Long id,
+                                              @RequestBody @Valid LivroDto livroDto){
+
+        Optional<Livro> livroOptional = livroService.findById(id);
+        if(!livroOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
+        }
+        var livro = livroOptional.get();
+        try {
+            BeanUtils.copyProperties(livro, livroDto);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+        livro.setId(livroOptional.get().getId());
+
+        return ResponseEntity.status(HttpStatus.OK).body(livroService.save(livro));
+    }
 }
 

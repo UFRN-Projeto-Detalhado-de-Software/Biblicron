@@ -1,54 +1,55 @@
 package edu.ufrn.imd.Biblicron.model;
-import edu.ufrn.imd.Biblicron.model.interfaces.IEntidade;
-import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.Objects;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@Getter
-@Setter
-@Builder
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
-public class Livro implements IEntidade {
-
-    private static final long serialVersionUID = 1L;
+@Table(name = "TB_LIVRO")
+public class Livro implements Serializable {
+    public static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long Id;
 
-    @NotBlank(message = "{livro.titulo.notblank}")
-    @Size(max = 100, message = "{livro.titulo.size}")
+    @Column(nullable = false, unique = true, length = 255)
     private String titulo;
+
+    @Column(nullable = false, unique = false, length = 255)
     private String autor;
 
-    public void setTitulo(String title){
-        this.titulo = title;
+    @Column(nullable = false, unique = false, length = 10)
+    private int quantidade;
+
+    public long getId() {
+        return Id;
     }
 
-    public void setAutor(String author){
-        this.autor = author;
+    public void setId(long id) {
+        Id = id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Livro that = (Livro) o;
-        return id.equals(that.id);
+    public String getTitulo() {
+        return titulo;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 }
