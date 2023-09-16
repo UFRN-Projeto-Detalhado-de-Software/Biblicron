@@ -2,6 +2,7 @@ package edu.ufrn.imd.Biblicron.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "TB_LIVRO")
@@ -10,7 +11,7 @@ public class Livro implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private long id;
 
     @Column(nullable = false, unique = true, length = 255)
     private String titulo;
@@ -18,15 +19,18 @@ public class Livro implements Serializable {
     @Column(nullable = false, unique = false, length = 255)
     private String autor;
 
-    @Column(nullable = false, unique = false, length = 10)
+    @Column(nullable = false, unique = false, length = 1000)
     private int quantidade;
 
+    @Column(nullable = false, unique = false)
+    private LocalDate dataPublicacao;
+
     public long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -51,5 +55,13 @@ public class Livro implements Serializable {
 
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public LocalDate getDataPublicacao() {
+        return dataPublicacao;
+    }
+
+    public void setDataPublicacao(LocalDate dataPublicacao) {
+        this.dataPublicacao = dataPublicacao;
     }
 }

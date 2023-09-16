@@ -5,6 +5,10 @@ import edu.ufrn.imd.Biblicron.model.Livro;
 import edu.ufrn.imd.Biblicron.service.LivroService;
 import org.apache.catalina.mbeans.MBeanUtils;
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +33,15 @@ public class LivroController {
         if(livroService.existsByTitulo(livroDto.getTitulo())){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Book Title is already in use.");
         }
+        if(livroDto.getTitulo().length() > 255){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Book Title must have less than 255 characters.");
+        }
+        if(livroDto.getAutor().length() > 255){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Author's Name must have less than 255 characters.");
+        }
+        if(livroDto.getQuantidade() > 1000){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Quantity of books must be less than 1000 characters.");
+        }
 
         var livro = new Livro();
         try {
@@ -41,8 +54,8 @@ public class LivroController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Livro>> getAllLivros(){
-        return ResponseEntity.status(HttpStatus.OK).body(livroService.findAll());
+    public ResponseEntity<Page<Livro>> getAllLivros(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(livroService.findAll(pageable));
     }
 
     @GetMapping("/{id}")
