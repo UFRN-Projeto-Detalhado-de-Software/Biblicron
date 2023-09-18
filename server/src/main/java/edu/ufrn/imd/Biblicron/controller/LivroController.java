@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -40,7 +41,7 @@ public class LivroController {
             return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Author's Name must have less than 255 characters.");
         }
         if(livroDto.getQuantidade() > 1000){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Quantity of books must be less than 1000 characters.");
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Quantity of books must be less than 1000 copies.");
         }
 
         var livro = new Livro();
@@ -85,7 +86,14 @@ public class LivroController {
         if(!livroOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
         }
+
+        //Livro receives livroOptional properties, if there is a book with the id in the database.
         var livro = livroOptional.get();
+
+        if(livroService.existsByTitulo(livroDto.getTitulo()) && !Objects.equals(livro.getTitulo(), livroDto.getTitulo())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Book Title is already in use.");
+        }
+
         try {
             BeanUtils.copyProperties(livro, livroDto);
         } catch (IllegalAccessException | InvocationTargetException e) {
