@@ -17,6 +17,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    public boolean existsByUserId(Long id) {
+        return userRepository.existsById(id);
+    }
 
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);

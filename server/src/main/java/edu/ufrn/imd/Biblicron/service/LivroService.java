@@ -24,6 +24,10 @@ public class LivroService {
         return livroRepository.save(livro);
     }
 
+    public boolean existsById(Long id) {
+        return livroRepository.existsById(id);
+    }
+
     public boolean existsByTitulo(String titulo) {
         return livroRepository.existsByTitulo(titulo);
     }

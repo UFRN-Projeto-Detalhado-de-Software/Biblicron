@@ -57,6 +57,10 @@ public class Livro implements Serializable {
         this.quantidade = quantidade;
     }
 
+    public boolean ehDisponivel() {
+        return this.getQuantidade() > 0;
+    }
+
     public LocalDate getDataPublicacao() {
         return dataPublicacao;
     }
