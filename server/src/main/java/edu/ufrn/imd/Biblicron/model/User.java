@@ -1,6 +1,9 @@
 package edu.ufrn.imd.Biblicron.model;
 
+import edu.ufrn.imd.Biblicron.model.Enum.UserType;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -19,8 +22,10 @@ public class User implements Serializable {
     @Column(nullable = false, unique = false, length = 50)
     private String password;
 
-    @Column(nullable = false, unique = false, length = 10)
-    private String userType;
+    @Column(nullable = false, unique = false)
+    @NotNull(message = "{user.usertype.notnull}")
+    @Enumerated(EnumType.STRING)
+    private UserType userType;
 
     public long getId() {
         return id;
@@ -46,11 +51,11 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getUserType() {
+    public UserType getUserType() {
         return userType;
     }
 
-    public void setUserType(String userType) {
+    public void setUserType(UserType userType) {
         this.userType = userType;
     }
 }

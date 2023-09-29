@@ -55,12 +55,12 @@ public class LivroController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Livro>> getAllLivros(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)Pageable pageable){
+    public ResponseEntity<Page<Livro>> findAllLivros(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(livroService.findAll(pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getLivroById(@PathVariable(value = "id") Long id){
+    public ResponseEntity<Object> findLivroById(@PathVariable(value = "id") Long id){
         Optional<Livro> livroOptional = livroService.findById(id);
         if(!livroOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");

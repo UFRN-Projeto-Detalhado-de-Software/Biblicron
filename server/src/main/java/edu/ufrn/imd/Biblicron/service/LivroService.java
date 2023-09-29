@@ -35,6 +35,10 @@ public class LivroService {
         return livroRepository.findById(id);
     }
 
+    public Optional<Livro> findByTitulo(String titulo){
+        return livroRepository.findByTitulo(titulo);
+    }
+
     @Transactional
     public void delete(Livro livro) {
         livroRepository.delete(livro);

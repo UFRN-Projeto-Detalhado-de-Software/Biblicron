@@ -36,9 +36,6 @@ public class UserController {
         if(userDto.getPassword().length() > 50){
             return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Password must have less than 50 characters.");
         }
-        if(userDto.getUserType().length() > 10){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: User Type must have less than 10 characters.");
-        }
 
         var user = new User();
         try {
@@ -51,12 +48,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<User>> getAllUsers(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)Pageable pageable){
+    public ResponseEntity<Page<User>> findAllUsers(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getUserById(@PathVariable(value = "id")Long id){
+    public ResponseEntity<Object> findUserById(@PathVariable(value = "id")Long id){
         Optional<User> userOptional = userService.findById(id);
 
         if(!userOptional.isPresent()){

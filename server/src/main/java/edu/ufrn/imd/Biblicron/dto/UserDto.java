@@ -1,5 +1,7 @@
 package edu.ufrn.imd.Biblicron.dto;
 
+import edu.ufrn.imd.Biblicron.model.Enum.UserType;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -15,7 +17,7 @@ public class UserDto {
 
     @NotBlank
     @Size(max = 10)
-    private String userType;
+    private UserType userType;
 
     public String getUsername() {
         return username;
@@ -33,11 +35,11 @@ public class UserDto {
         this.password = password;
     }
 
-    public String getUserType() {
+    public UserType getUserType() {
         return userType;
     }
 
-    public void setUserType(String userType) {
+    public void setUserType(UserType userType) {
         this.userType = userType;
     }
 }

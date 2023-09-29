@@ -1,5 +1,6 @@
 package edu.ufrn.imd.Biblicron.repository;
 
+import edu.ufrn.imd.Biblicron.model.Emprestimo;
 import edu.ufrn.imd.Biblicron.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -7,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface IUserRepository extends JpaRepository<User, Long> {
-    boolean existsByUsername(String username);
+public interface IEmprestimoRepository extends JpaRepository<Emprestimo, Long> {
+    Optional<Emprestimo> findByUsuarioAndReturnDateIsNull(User usuario);
 
-    Optional<User> findByUsername(String username);
 }
