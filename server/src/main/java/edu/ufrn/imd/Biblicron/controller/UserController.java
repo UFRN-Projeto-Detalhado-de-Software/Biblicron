@@ -36,6 +36,9 @@ public class UserController {
         if(userDto.getPassword().length() > 50){
             return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Password must have less than 50 characters.");
         }
+        if(userDto.getUserType() == null){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("No content: o Tipo de Usuário precisa estar definido.");
+        }
 
         var user = new User();
         try {

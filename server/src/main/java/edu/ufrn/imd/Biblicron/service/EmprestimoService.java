@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -129,9 +130,7 @@ public class EmprestimoService {
         throw new EntityNotFoundException("Empréstimo não encontrado com o ID: " + id);
     }
 
-    @Transactional
-    public void delete(Emprestimo emprestimo){
-        emprestimoRepository.delete(emprestimo);
+    public List<Emprestimo> findEmprestimosComMaxReturnDate(LocalDate dataLimite) {
+        return emprestimoRepository.findByMaxReturnDateWithin24Hours(dataLimite, dataLimite.plusDays(1));
     }
-
 }

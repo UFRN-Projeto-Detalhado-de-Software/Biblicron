@@ -75,14 +75,4 @@ public class EmprestimoController {
         return ResponseEntity.status(HttpStatus.OK).body(emprestimoOptional.get());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteEmprestimo(@PathVariable(value = "id") Long id){
-        Optional<Emprestimo> emprestimoOptional = emprestimoService.findById(id);
-        if(!emprestimoOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Empréstimo não encontrado.");
-        }
-        emprestimoService.delete(emprestimoOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Empréstimo de id " + id + " deletado corretamente.");
-    }
-
 }

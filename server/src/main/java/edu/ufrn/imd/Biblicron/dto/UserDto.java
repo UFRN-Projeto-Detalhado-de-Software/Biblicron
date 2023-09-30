@@ -19,6 +19,10 @@ public class UserDto {
     @Size(max = 10)
     private UserType userType;
 
+    @NotBlank
+    @Size(max = 50)
+    private String email;
+
     public String getUsername() {
         return username;
     }
@@ -41,5 +45,13 @@ public class UserDto {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
