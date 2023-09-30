@@ -30,14 +30,20 @@ public class UserController {
         if(userService.existsByUsername(userDto.getUsername())){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Username already in use.");
         }
+        if(userService.existsByEmail(userDto.getEmail())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Email already in use");
+        }
         if(userDto.getUsername().length() > 50){
             return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Username must have less than 50 characters.");
         }
         if(userDto.getPassword().length() > 50){
             return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Password must have less than 50 characters.");
         }
-        if(userDto.getUserType() == null){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("No content: o Tipo de Usuário precisa estar definido.");
+        if(userDto.getEmail().length() > 50){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Email must have less than 50 characters.");
+        }
+        if (userDto.getUserType() == null) {
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: O campo 'userType' não pode ser nulo.");
         }
 
         var user = new User();
