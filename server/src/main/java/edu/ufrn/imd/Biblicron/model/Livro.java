@@ -1,8 +1,15 @@
 package edu.ufrn.imd.Biblicron.model;
 
+import edu.ufrn.imd.Biblicron.model.Enum.Genero;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "TB_LIVRO")
@@ -13,17 +20,30 @@ public class Livro implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Getter
+    @Setter
     @Column(nullable = false, unique = true, length = 255)
     private String titulo;
 
+    @Getter
+    @Setter
     @Column(nullable = false, unique = false, length = 255)
     private String autor;
 
+    @Getter
+    @Setter
     @Column(nullable = false, unique = false, length = 1000)
     private int quantidade;
 
+    @Getter
+    @Setter
     @Column(nullable = false, unique = false)
     private LocalDate dataPublicacao;
+
+    @ElementCollection(targetClass = Genero.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "TB_LIVRO_GENERO", joinColumns = @JoinColumn(name = "livro_id"))
+    @Enumerated(EnumType.STRING)
+    private List<Genero> generos = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -33,35 +53,11 @@ public class Livro implements Serializable {
         this.id = id;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public List<Genero> getGeneros() {
+        return generos;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
-
-    public int getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public LocalDate getDataPublicacao() {
-        return dataPublicacao;
-    }
-
-    public void setDataPublicacao(LocalDate dataPublicacao) {
-        this.dataPublicacao = dataPublicacao;
+    public void setGeneros(List<Genero> generos) {
+        this.generos = generos;
     }
 }

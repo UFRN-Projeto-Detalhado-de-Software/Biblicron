@@ -42,6 +42,12 @@ public class LivroController {
         if(livroDto.getQuantidade() > 1000){
             return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Quantity of books must be less than 1000 characters.");
         }
+        if(livroDto.getGeneros() != null && livroDto.getGeneros().size() > 3){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Um livro precisa ter, no máximo, 3 gêneros.");
+        }
+        if (livroDto.getGeneros() == null || livroDto.getGeneros().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Um livro precisa ter, no mínimo, 1 gênero.");
+        }
 
         var livro = new Livro();
         try {
@@ -49,6 +55,9 @@ public class LivroController {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+
+        // Configure os gêneros do livro
+        livro.setGeneros(livroDto.getGeneros());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(livroService.save(livro));
     }
@@ -81,6 +90,19 @@ public class LivroController {
     public ResponseEntity<Object> updateLivro(@PathVariable(value = "id") Long id,
                                               @RequestBody @Valid LivroDto livroDto){
 
+        //Checando se um livro já existe com esse título e se o id do livro é diferente do livro que o usuário deseja editar
+        Optional<Livro> livroByTitulo = livroService.findByTitulo(livroDto.getTitulo());
+        if(livroByTitulo.isPresent() && livroByTitulo.get().getId() != id){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Book Title is already in use.");
+        }
+
+        if(livroDto.getGeneros() != null && livroDto.getGeneros().size() > 3){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Um livro precisa ter, no máximo, 3 gêneros.");
+        }
+        if (livroDto.getGeneros() == null || livroDto.getGeneros().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Um livro precisa ter, no mínimo, 1 gênero.");
+        }
+
         Optional<Livro> livroOptional = livroService.findById(id);
         if(!livroOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
@@ -92,6 +114,9 @@ public class LivroController {
             throw new RuntimeException(e);
         }
         livro.setId(livroOptional.get().getId());
+
+        // Configure os gêneros do livro
+        livro.setGeneros(livroDto.getGeneros());
 
         return ResponseEntity.status(HttpStatus.OK).body(livroService.save(livro));
     }

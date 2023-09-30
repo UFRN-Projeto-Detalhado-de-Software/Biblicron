@@ -1,8 +1,13 @@
 package edu.ufrn.imd.Biblicron.dto;
 
+import edu.ufrn.imd.Biblicron.model.Enum.Genero;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LivroDto {
     @NotBlank
@@ -19,6 +24,9 @@ public class LivroDto {
 
     @NotBlank
     private LocalDate dataPublicacao;
+
+    @NotNull
+    private List<Genero> generos = new ArrayList<>();
 
     public String getTitulo() {
         return titulo;
@@ -50,5 +58,13 @@ public class LivroDto {
 
     public void setDataPublicacao(LocalDate dataPublicacao) {
         this.dataPublicacao = dataPublicacao;
+    }
+
+    public List<Genero> getGeneros() {
+        return generos;
+    }
+
+    public void setGeneros(List<Genero> generos) {
+        this.generos = generos;
     }
 }
