@@ -25,6 +25,9 @@ public class LivroDto {
     @NotBlank
     private LocalDate dataPublicacao;
 
+    @NotBlank
+    private int paginas;
+
     @NotNull
     private List<Genero> generos = new ArrayList<>();
 
@@ -58,6 +61,14 @@ public class LivroDto {
 
     public void setDataPublicacao(LocalDate dataPublicacao) {
         this.dataPublicacao = dataPublicacao;
+    }
+
+    public int getPaginas() {
+        return paginas;
+    }
+
+    public void setPaginas(int paginas) {
+        this.paginas = paginas;
     }
 
     public List<Genero> getGeneros() {

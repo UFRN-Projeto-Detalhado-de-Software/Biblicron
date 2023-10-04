@@ -1,5 +1,6 @@
 package edu.ufrn.imd.Biblicron.controller;
 
+import edu.ufrn.imd.Biblicron.dto.EstipularPrazoRequest;
 import edu.ufrn.imd.Biblicron.dto.LivroDto;
 import edu.ufrn.imd.Biblicron.model.Livro;
 import edu.ufrn.imd.Biblicron.service.LivroService;
@@ -47,6 +48,12 @@ public class LivroController {
         }
         if (livroDto.getGeneros() == null || livroDto.getGeneros().isEmpty()) {
             return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Um livro precisa ter, no mínimo, 1 gênero.");
+        }
+        if(livroDto.getPaginas() <= 0){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Quantidade de páginas precisa ser maior que 0.");
+        }
+        if(livroDto.getDataPublicacao() == null){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: É necessário informar a data de publicação do livro");
         }
 
         var livro = new Livro();
@@ -120,5 +127,63 @@ public class LivroController {
 
         return ResponseEntity.status(HttpStatus.OK).body(livroService.save(livro));
     }
+
+    @PostMapping("/estipularPrazoDia")
+    public ResponseEntity<Object> estipularPrazoDias(@RequestBody EstipularPrazoRequest estipularPrazoRequest){
+        if(estipularPrazoRequest.getParametro() <= 0){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: a quantidade de dias precisa ser maior que 0");
+        }
+        if(estipularPrazoRequest.getNomeLivro() == null){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: é necessário informar o nome do livro");
+        }
+
+        Optional<Livro> livroOptional = livroService.findByTitulo(estipularPrazoRequest.getNomeLivro());
+        if (!livroOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
+        }
+
+        Livro livro = livroOptional.get();
+        int paginas = livro.getPaginas();
+
+        // Calcula quantas páginas o usuário precisa ler por dia para terminar em quantidadeDias
+        int paginasPorDia = calcularTempoDias(paginas, estipularPrazoRequest.getParametro());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Você precisa ler " + paginasPorDia + " páginas por dia para terminar em " + estipularPrazoRequest.getParametro() + " dias. O livro tem um total de " + livro.getPaginas() + " páginas.");
+    }
+
+    @PostMapping("/estipularPrazoPaginas")
+    public ResponseEntity<Object> estipularPrazoPaginas(@RequestBody EstipularPrazoRequest estipularPrazoRequest){
+        if(estipularPrazoRequest.getParametro() <= 0){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: a quantidade de páginas precisa ser maior que 0");
+        }
+        if(estipularPrazoRequest.getNomeLivro() == null){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: é necessário informar o nome do livro");
+        }
+
+        Optional<Livro> livroOptional = livroService.findByTitulo(estipularPrazoRequest.getNomeLivro());
+        if (!livroOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
+        }
+
+        Livro livro = livroOptional.get();
+        int paginas = livro.getPaginas();
+
+        // Calcula quantos dias o usuário levará para ler o livro com a taxa de leitura informada
+        int quantidadeDias = calcularTempoPaginas(paginas, estipularPrazoRequest.getParametro());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Você terminará a leitura em " + quantidadeDias + " dias se ler " + estipularPrazoRequest.getParametro() + " páginas por dia. O livro tem um total de " + livro.getPaginas() + " páginas.");
+    }
+
+
+    private int calcularTempoDias(int paginas, int quantidadeDias) {
+        // Calcula quantas páginas o usuário precisa ler por dia para terminar em quantidadeDias
+        return Math.round((float) paginas / quantidadeDias);
+    }
+
+    private int calcularTempoPaginas(int paginas, int paginasPorDia) {
+        // Calcula quantos dias o usuário levará para ler o livro com a taxa de leitura informada
+        return Math.round((float) paginas / paginasPorDia);
+    }
+
 }
 

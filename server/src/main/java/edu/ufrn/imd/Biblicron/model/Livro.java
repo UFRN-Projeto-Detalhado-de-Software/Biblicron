@@ -40,6 +40,11 @@ public class Livro implements Serializable {
     @Column(nullable = false, unique = false)
     private LocalDate dataPublicacao;
 
+    @Getter
+    @Setter
+    @Column(nullable = false, unique = false)
+    private int paginas;
+
     @ElementCollection(targetClass = Genero.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "TB_LIVRO_GENERO", joinColumns = @JoinColumn(name = "livro_id"))
     @Enumerated(EnumType.STRING)

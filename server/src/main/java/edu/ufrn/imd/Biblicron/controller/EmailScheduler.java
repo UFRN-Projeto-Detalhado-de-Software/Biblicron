@@ -36,10 +36,6 @@ public class EmailScheduler {
         List<Emprestimo> emprestimosProximosDoVencimento = emprestimoService.findEmprestimosComMaxReturnDate(LocalDate.now());
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        logger.info("Método enviarEmailsDeLembrete foi chamado.");
-        logger.info("emprestimos a vencer: " + emprestimosProximosDoVencimento.size());
-
-
         for (Emprestimo emprestimo : emprestimosProximosDoVencimento) {
             String emailUsuario = emprestimo.getUsuario().getEmail();
             String assunto = "Lembrete de devolução do livro " + emprestimo.getLivro().getTitulo();
