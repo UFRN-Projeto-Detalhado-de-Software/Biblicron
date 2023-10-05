@@ -23,6 +23,9 @@ public class LivroDto {
     private int quantidade;
 
     @NotBlank
+    @Size(max = 1000)
+    private int quantidadeDisponivel;
+    @NotBlank
     private LocalDate dataPublicacao;
 
     @NotBlank
@@ -77,5 +80,13 @@ public class LivroDto {
 
     public void setGeneros(List<Genero> generos) {
         this.generos = generos;
+    }
+
+    public int getQuantidadeDisponivel() {
+        return quantidadeDisponivel;
+    }
+
+    public void setQuantidadeDisponivel(int quantidadeDisponivel) {
+        this.quantidadeDisponivel = quantidadeDisponivel;
     }
 }

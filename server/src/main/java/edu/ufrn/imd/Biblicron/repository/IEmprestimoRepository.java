@@ -17,5 +17,10 @@ public interface IEmprestimoRepository extends JpaRepository<Emprestimo, Long> {
     @Query("SELECT e FROM Emprestimo e WHERE e.maxReturnDate >= :dataLimite AND e.maxReturnDate <= :dataLimitePlusOneDay")
     List<Emprestimo> findByMaxReturnDateWithin24Hours(@Param("dataLimite") LocalDate dataLimite, @Param("dataLimitePlusOneDay") LocalDate dataLimitePlusOneDay);
 
+    @Query("SELECT e FROM Emprestimo e WHERE e.usuario.id = :id")
+    List<Emprestimo> findEmprestimosByUsuario(@Param("id") Long id);
+
+    @Query("SELECT e FROM Emprestimo e WHERE e.livro.id = :id")
+    List<Emprestimo> findEmprestimosByLivro(@Param("id") Long id);
 
 }

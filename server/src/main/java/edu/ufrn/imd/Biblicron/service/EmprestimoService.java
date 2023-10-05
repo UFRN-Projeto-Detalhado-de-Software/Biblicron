@@ -59,7 +59,7 @@ public class EmprestimoService {
         }
 
         // Verifica se há livros disponíveis no estoque
-        if (livro.getQuantidade() > 0) {
+        if (livro.getQuantidadeDisponivel() > 0) {
             Emprestimo emprestimo = new Emprestimo();
             emprestimo.setLivro(livro);
             emprestimo.setUsuario(usuario);
@@ -68,7 +68,7 @@ public class EmprestimoService {
             emprestimo.setReturnDate(null);
 
             // Atualiza a quantidade disponível no estoque
-            livro.setQuantidade(livro.getQuantidade() - 1);
+            livro.setQuantidade(livro.getQuantidadeDisponivel() - 1);
             livroRepository.save(livro);
 
             // Salve o empréstimo no banco de dados

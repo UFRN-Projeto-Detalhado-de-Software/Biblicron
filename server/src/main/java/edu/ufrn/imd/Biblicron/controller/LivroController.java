@@ -66,6 +66,8 @@ public class LivroController {
         // Configure os gêneros do livro
         livro.setGeneros(livroDto.getGeneros());
 
+        // Define a quantidade disponivel para a quantidade original
+        livro.setQuantidadeDisponivel(livroDto.getQuantidade());
         return ResponseEntity.status(HttpStatus.CREATED).body(livroService.save(livro));
     }
 
@@ -83,6 +85,14 @@ public class LivroController {
         return ResponseEntity.status(HttpStatus.OK).body(livroOptional.get());
     }
 
+    @GetMapping("/{id}/sugestoes")
+    public ResponseEntity<Object> generateSugestoesById(@PathVariable(value = "id") Long id){
+        Optional<Livro> livroOptional = livroService.findById(id);
+        if(!livroOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(livroService.generateSugestoesById(id));
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteLivro(@PathVariable(value = "id") Long id){
         Optional<Livro> livroOptional = livroService.findById(id);
@@ -186,4 +196,3 @@ public class LivroController {
     }
 
 }
-

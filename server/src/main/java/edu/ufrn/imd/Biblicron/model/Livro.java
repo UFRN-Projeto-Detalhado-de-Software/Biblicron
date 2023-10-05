@@ -37,6 +37,11 @@ public class Livro implements Serializable {
 
     @Getter
     @Setter
+    @Column(nullable = false, unique = false, length = 1000)
+    private int quantidadeDisponivel;
+
+    @Getter
+    @Setter
     @Column(nullable = false, unique = false)
     private LocalDate dataPublicacao;
 
