@@ -125,6 +125,9 @@ public class EmprestimoService {
 
                 return emprestimo;
             }
+            else {
+                throw new IllegalStateException("Empréstimo " + id + " vencido");
+            }
         }
 
         throw new EntityNotFoundException("Empréstimo não encontrado com o ID: " + id);
