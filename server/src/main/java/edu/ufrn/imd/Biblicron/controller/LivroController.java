@@ -61,11 +61,13 @@ public class LivroController {
 
     @GetMapping("/{id}/sugestoes")
     public ResponseEntity<Object> generateSugestoesById(@PathVariable(value = "id") Long id){
-        Optional<Livro> livroOptional = livroService.findById(id);
-        if(!livroOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
+
+        try {
+            List<Livro> sugestoes = this.livroService.generateSugestoesById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(sugestoes);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException(e);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(livroService.generateSugestoesById(id));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteLivro(@PathVariable(value = "id") Long id){

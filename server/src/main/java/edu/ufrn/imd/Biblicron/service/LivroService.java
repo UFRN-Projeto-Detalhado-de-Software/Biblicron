@@ -78,7 +78,12 @@ public class LivroService {
     }
 
     public List<Livro> generateSugestoesById(Long id){
-        var livro = livroRepository.findById(id).get();
+        Optional<Livro> livroOptional = this.findById(id);
+
+        if(!livroOptional.isPresent()){
+            throw new IllegalStateException("Book not found.");
+        }
+        var livro = livroOptional.get();
 
         var sugestoes = new HashMap<Livro, Integer>();
         var usuariosPercorridos = new HashMap<User, Boolean>();
