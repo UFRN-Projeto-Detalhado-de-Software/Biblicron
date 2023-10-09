@@ -52,11 +52,13 @@ public class LivroController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> findLivroById(@PathVariable(value = "id") Long id){
-        Optional<Livro> livroOptional = livroService.findById(id);
-        if(!livroOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
+
+        try {
+            Livro livro = livroService.findById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(livro);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException(e);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(livroOptional.get());
     }
 
     @GetMapping("/{id}/sugestoes")
@@ -71,12 +73,13 @@ public class LivroController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteLivro(@PathVariable(value = "id") Long id){
-        Optional<Livro> livroOptional = livroService.findById(id);
-        if(!livroOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
+        
+        try {
+            Livro deleted = this.livroService.delete(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Book of id " + deleted.getId() + " deleted successfully.");
+        } catch (IllegalStateException e) {
+            throw new RuntimeException(e);
         }
-        livroService.delete(livroOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Book of id " + id + " deleted successfully.");
     }
 
     @PutMapping("/{id}")

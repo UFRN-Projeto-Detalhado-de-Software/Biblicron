@@ -64,8 +64,12 @@ public class LivroService {
         return livroRepository.findAll(pageable);
     }
 
-    public Optional<Livro> findById(Long id) {
-        return livroRepository.findById(id);
+    public Livro findById(Long id) {
+        Optional<Livro> livroOptional = livroRepository.findById(id);
+        if(!livroOptional.isPresent()){
+            throw new IllegalStateException("Book not found.");
+        }
+        return livroOptional.get();
     }
 
     public Optional<Livro> findByTitulo(String titulo){
@@ -73,17 +77,14 @@ public class LivroService {
     }
 
     @Transactional
-    public void delete(Livro livro) {
-        livroRepository.delete(livro);
+    public Livro delete(Long id) {
+        Livro livro = this.findById(id);
+        livroRepository.delete(livro);;
+        return livro;
     }
 
     public List<Livro> generateSugestoesById(Long id){
-        Optional<Livro> livroOptional = this.findById(id);
-
-        if(!livroOptional.isPresent()){
-            throw new IllegalStateException("Book not found.");
-        }
-        var livro = livroOptional.get();
+        Livro livro = this.findById(id);
 
         var sugestoes = new HashMap<Livro, Integer>();
         var usuariosPercorridos = new HashMap<User, Boolean>();
