@@ -75,6 +75,29 @@ public class LivroService {
     public Optional<Livro> findByTitulo(String titulo){
         return livroRepository.findByTitulo(titulo);
     }
+    
+    @Transactional
+    public Livro update(Long id, Livro livro) {
+      
+        Optional<Livro> livroOptional = this.findByTitulo(livro.getTitulo());
+
+        Livro savedLivro = this.findById(livroOptional.get().getId());
+
+        if(savedLivro.getId() != id){
+            throw new IllegalStateException("Conflict: Book Title is already in use.");
+        }
+
+        if(livro.getGeneros() != null && livro.getGeneros().size() > 3){
+            throw new IllegalStateException("Length Required: Um livro precisa ter, no máximo, 3 gêneros.");
+        }
+        if (livro.getGeneros() == null || livro.getGeneros().isEmpty()) {
+            throw new IllegalStateException("Length Required: Um livro precisa ter, no mínimo, 1 gênero.");
+        }
+
+        savedLivro.setGeneros(livro.getGeneros());
+
+        return this.save(savedLivro);
+    }
 
     @Transactional
     public Livro delete(Long id) {
