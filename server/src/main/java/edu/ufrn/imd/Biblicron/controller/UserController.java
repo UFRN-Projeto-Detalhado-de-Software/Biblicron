@@ -27,33 +27,15 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto){
-        if(userService.existsByUsername(userDto.getUsername())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Username already in use.");
-        }
-        if(userService.existsByEmail(userDto.getEmail())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Email already in use");
-        }
-        if(userDto.getUsername().length() > 50){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Username must have less than 50 characters.");
-        }
-        if(userDto.getPassword().length() > 50){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Password must have less than 50 characters.");
-        }
-        if(userDto.getEmail().length() > 50){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Email must have less than 50 characters.");
-        }
-        if (userDto.getUserType() == null) {
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: O campo 'userType' não pode ser nulo.");
-        }
-
         var user = new User();
         try {
             BeanUtils.copyProperties(user, userDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException(e);
         }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
     }
 
     @GetMapping

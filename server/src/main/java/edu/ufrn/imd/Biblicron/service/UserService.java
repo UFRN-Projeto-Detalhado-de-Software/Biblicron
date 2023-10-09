@@ -27,6 +27,26 @@ public class UserService {
     }
 
     public User save(User user) {
+
+        if(this.existsByUsername(user.getUsername())){
+            throw new IllegalStateException("Conflict: Username already in use.");
+        }
+        if(this.existsByEmail(user.getEmail())){
+            throw new IllegalStateException("Conflict: Email already in use");
+        }
+        if(user.getUsername().length() > 50){
+            throw new IllegalStateException("Length Required: Username must have less than 50 characters.");
+        }
+        if(user.getPassword().length() > 50){
+            throw new IllegalStateException("Length Required: Password must have less than 50 characters.");
+        }
+        if(user.getEmail().length() > 50){
+            throw new IllegalStateException("Length Required: Email must have less than 50 characters.");
+        }
+        if (user.getUserType() == null) {
+            throw new IllegalStateException("Length Required: O campo 'userType' não pode ser nulo.");
+        }
+
         return userRepository.save(user);
     }
 

@@ -31,44 +31,18 @@ public class LivroController {
 
     @PostMapping
     public ResponseEntity<Object> saveLivro(@RequestBody @Valid LivroDto livroDto){
-        if(livroService.existsByTitulo(livroDto.getTitulo())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Book Title is already in use.");
-        }
-        if(livroDto.getTitulo().length() > 255){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Book Title must have less than 255 characters.");
-        }
-        if(livroDto.getAutor().length() > 255){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Author's Name must have less than 255 characters.");
-        }
-        if(livroDto.getQuantidade() > 1000){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Quantity of books must be less than 1000 characters.");
-        }
-        if(livroDto.getGeneros() != null && livroDto.getGeneros().size() > 3){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Um livro precisa ter, no máximo, 3 gêneros.");
-        }
-        if (livroDto.getGeneros() == null || livroDto.getGeneros().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Um livro precisa ter, no mínimo, 1 gênero.");
-        }
-        if(livroDto.getPaginas() <= 0){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Quantidade de páginas precisa ser maior que 0.");
-        }
-        if(livroDto.getDataPublicacao() == null){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: É necessário informar a data de publicação do livro");
-        }
-
         var livro = new Livro();
+        livro.setGeneros(livroDto.getGeneros());
+        livro.setQuantidadeDisponivel(livroDto.getQuantidade());
+
         try {
             BeanUtils.copyProperties(livro, livroDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(livroService.save(livro));
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException(e);
         }
-
-        // Configure os gêneros do livro
-        livro.setGeneros(livroDto.getGeneros());
-
-        // Define a quantidade disponivel para a quantidade original
-        livro.setQuantidadeDisponivel(livroDto.getQuantidade());
-        return ResponseEntity.status(HttpStatus.CREATED).body(livroService.save(livro));
     }
 
     @GetMapping

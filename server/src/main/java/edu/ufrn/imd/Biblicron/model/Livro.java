@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +60,34 @@ public class Livro implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getTitulo() {
+        return this.titulo;
+    }
+
+    public String getAutor() {
+        return this.autor;
+    }
+
+    public int getPaginas() {
+        return this.paginas;
+    }
+
+    public int getQuantidade() {
+        return this.quantidade;
+    }
+
+    public int getQuantidadeDisponivel() {
+        return this.quantidadeDisponivel;
+    }
+
+    public void setQuantidadeDisponivel(int quantidade) {
+        this.quantidadeDisponivel = quantidade;
+    }
+
+    public LocalDate getDataPublicacao() {
+        return this.dataPublicacao;
     }
 
     public List<Genero> getGeneros() {

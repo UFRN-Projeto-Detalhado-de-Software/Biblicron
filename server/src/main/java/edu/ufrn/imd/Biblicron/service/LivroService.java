@@ -28,6 +28,32 @@ public class LivroService {
 
     @Transactional
     public Livro save(Livro livro) {
+
+        if(this.existsByTitulo(livro.getTitulo())){
+            throw new IllegalStateException("Conflict: Book Title already exists.");
+        }
+        if(livro.getTitulo().length() > 255){
+            throw new IllegalStateException("Length Required: Book Title must have less than 255 characters.");
+        }
+        if(livro.getAutor().length() > 255){
+            throw new IllegalStateException("Length Required: Author's Name must have less than 255 characters.");
+        }
+        if(livro.getQuantidade() > 1000){
+            throw new IllegalStateException("Length Required: Quantity of books must be less than 1000 characters.");
+        }
+        if(livro.getGeneros() != null && livro.getGeneros().size() > 3){
+            throw new IllegalStateException("Length Required: Um livro precisa ter, no máximo, 3 gêneros.");
+        }
+        if (livro.getGeneros() == null || livro.getGeneros().isEmpty()) {
+            throw new IllegalStateException("Length Required: Um livro precisa ter, no mínimo, 1 gênero.");
+        }
+        if(livro.getPaginas() <= 0){
+            throw new IllegalStateException("Length Required: Quantidade de páginas precisa ser maior que 0.");
+        }
+        if(livro.getDataPublicacao() == null){
+            throw new IllegalStateException("Length Required: É necessário informar a data de publicação do livro");
+        }
+
         return livroRepository.save(livro);
     }
 
