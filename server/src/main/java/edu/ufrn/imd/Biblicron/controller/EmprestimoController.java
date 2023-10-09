@@ -2,7 +2,6 @@ package edu.ufrn.imd.Biblicron.controller;
 
 import edu.ufrn.imd.Biblicron.dto.EmprestimoRequestDto;
 import edu.ufrn.imd.Biblicron.model.Emprestimo;
-import edu.ufrn.imd.Biblicron.model.Livro;
 import edu.ufrn.imd.Biblicron.service.EmprestimoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -68,11 +66,12 @@ public class EmprestimoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> findLivroById(@PathVariable(value = "id") Long id){
-        Optional<Emprestimo> emprestimoOptional = emprestimoService.findById(id);
-        if(!emprestimoOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Empréstimo não encontrado.");
+        try {
+            Emprestimo emprestimo = emprestimoService.findById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(emprestimo);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException(e);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(emprestimoOptional.get());
     }
 
 }

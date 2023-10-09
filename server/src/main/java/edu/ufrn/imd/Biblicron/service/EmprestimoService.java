@@ -38,8 +38,12 @@ public class EmprestimoService {
         return emprestimoRepository.findAll(pageable);
     }
 
-    public Optional<Emprestimo> findById(Long id){
-        return emprestimoRepository.findById(id);
+    public Emprestimo findById(Long id){
+        Optional<Emprestimo> emprestimo = emprestimoRepository.findById(id);
+        if(!emprestimo.isPresent()) {
+            throw new IllegalStateException("Empréstimo not found.");
+        }
+        return emprestimo.get();
     }
 
     @Transactional
