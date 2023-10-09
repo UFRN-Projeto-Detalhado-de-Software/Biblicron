@@ -77,6 +77,10 @@ public class Livro implements Serializable {
     public int getQuantidade() {
         return this.quantidade;
     }
+    
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
 
     public int getQuantidadeDisponivel() {
         return this.quantidadeDisponivel;
