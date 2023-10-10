@@ -5,6 +5,7 @@ import edu.ufrn.imd.Biblicron.repository.IUserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -54,16 +55,27 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public User findById(Long id) {
+        Optional<User> userOptional = this.userRepository.findById(id);
+
+        if(!userOptional.isPresent()){
+            throw new IllegalStateException("User not found.");
+        }
+        return userOptional.get();
     }
 
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
+    @Transactional
+    public User update(User user) {
+      return this.save(user);
+    }
 
-    public void delete(User user) {
-        userRepository.delete(user);
+    public User delete(Long id) {
+       User livro = this.findById(id); 
+       userRepository.delete(livro);
+       return livro;
     }
 }

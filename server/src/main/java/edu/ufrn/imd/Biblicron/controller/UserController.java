@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -45,41 +44,38 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> findUserById(@PathVariable(value = "id")Long id){
-        Optional<User> userOptional = userService.findById(id);
 
-        if(!userOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        try {
+            User user = userService.findById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException(e);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(userOptional.get());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "id")Long id){
-        Optional<User> userOptional = userService.findById(id);
-        if(!userOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        try {
+            User user = userService.delete(id);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException(e);
         }
-        userService.delete(userOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("User of id " + id + " deleted successfully.");
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateUser(@PathVariable(value = "id")Long id,
                                              @RequestBody @Valid UserDto userDto){
 
-        Optional<User> userOptional = userService.findById(id);
-        if(!userOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
-        }
-
-        var user = userOptional.get();
+        var user = new User();
         try {
             BeanUtils.copyProperties(user, userDto);
+            User userAtualizado = this.userService.update(user);
+            return ResponseEntity.status(HttpStatus.OK).body(userAtualizado);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException(e);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
-        user.setId(userOptional.get().getId());
-
-        return ResponseEntity.status(HttpStatus.OK).body(userService.save(user));
     }
 }
