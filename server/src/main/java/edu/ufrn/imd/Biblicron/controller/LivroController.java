@@ -38,9 +38,7 @@ public class LivroController {
         try {
             BeanUtils.copyProperties(livro, livroDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(livroService.save(livro));
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalStateException e) {
+        } catch (IllegalAccessException | InvocationTargetException | IllegalStateException e) {
             throw new RuntimeException(e);
         }
     }

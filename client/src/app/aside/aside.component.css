@@ -1,0 +1,26 @@
+.aside-menu {
+  background-color: #357808;
+  color: #fff;
+  width: 150px; /* Ocupa 100% do espaço lateral */
+  height: 100vh; /* Ocupa toda a altura da viewport */
+  position: fixed; /* Permanece fixo na tela */
+  top: 0; /* Alinhado ao topo */
+  left: 0; /* Alinhado à esquerda */
+  padding: 20px;
+  overflow-y: auto; /* Adicione uma barra de rolagem vertical, se necessário */
+  font-family: 'Poppins';
+}
+
+.aside-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.aside-menu li {
+  margin-bottom: 10px;
+}
+
+.aside-menu a {
+  text-decoration: none;
+  color: #fff;
+}
