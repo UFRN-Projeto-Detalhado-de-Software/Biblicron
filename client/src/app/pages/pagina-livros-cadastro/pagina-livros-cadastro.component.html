@@ -1,5 +1,81 @@
 <body>
 <div class="container">
-<p style="font-size: 100px; justify-self: center">Página livros cadastro</p>
+  <div class="card mb-5 mb-xl-10">
+    <div class="card-header border-0">
+      <div class="card-title m-0">
+        <h3 class="fw-bolder m-0">Cadastro de Livro</h3>
+      </div>
+    </div>
+    <div id="kt_account_profile_details" class="collapse show">
+      <form class="form" [formGroup]="livroForm" novalidate="novalidate">
+        <div class="card-body border-top p-9" >
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Título
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="titulo" type="text" id="titulo" placeholder="Informe o título do livro">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Autor
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="autor" type="text" id="autor" placeholder="Informe o autor do livro">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Quantidade
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="quantidade" type="number" id="quantidade" placeholder="Informe a quantidade de exemplares">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Quantidade Disponível
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="quantidadeDisponivel" type="number" id="quantidadeDisponivel" placeholder="Informe a quantidade disponível">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Data de Publicação
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="dataPublicacao" type="date" id="dataPublicacao">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Número de Páginas
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="paginas" type="number" id="paginas" placeholder="Informe o número de páginas">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Gênero
+            </label>
+            <div class="col-lg-8 fv-row">
+              <select formControlName="genero" id="genero">
+                <option *ngFor="let genre of generoLivro" [value]="genre">{{ genre }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer d-flex justify-content-end py-6 px-9">
+          <button title="Botão para submeter formulário" type="button" class="btn btn-primary"
+                  (click)="submit()">
+            <ng-container >Salvar Livro</ng-container>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 </body>

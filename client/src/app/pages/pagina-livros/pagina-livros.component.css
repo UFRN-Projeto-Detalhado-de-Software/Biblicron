@@ -1,6 +1,12 @@
 .container{
   display: flex;
-  margin-left: 170px;
+  margin-left: 190px;
   height: 100vh;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.button{
+  width: 50px;
 }

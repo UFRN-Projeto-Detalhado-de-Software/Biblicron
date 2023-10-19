@@ -12,6 +12,7 @@ import { PaginaUsuariosComponent } from './pages/pagina-usuarios/pagina-usuarios
 import { PaginaLivrosCadastroComponent } from './pages/pagina-livros-cadastro/pagina-livros-cadastro.component';
 import { PaginaEmprestimosCadastroComponent } from './pages/pagina-emprestimos-cadastro/pagina-emprestimos-cadastro.component';
 import { PaginaUsuariosCadastroComponent } from './pages/pagina-usuarios-cadastro/pagina-usuarios-cadastro.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { PaginaUsuariosCadastroComponent } from './pages/pagina-usuarios-cadastr
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
