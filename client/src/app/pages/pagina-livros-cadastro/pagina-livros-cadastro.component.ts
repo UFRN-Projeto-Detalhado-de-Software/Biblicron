@@ -3,7 +3,7 @@ import {Subject} from "rxjs";
 import {Genero, Livro} from "../../models/Livro";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CrudService} from "../../services/CrudService";
-import {NavigationExtras, Router} from "@angular/router";
+import {ActivatedRoute, NavigationExtras, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 
 @Component({
@@ -15,6 +15,7 @@ import {HttpClient} from "@angular/common/http";
 export class PaginaLivrosCadastroComponent implements OnInit{
   private destroy$ = new Subject();
   public livroForm: FormGroup;
+  errorMessage: string = '';
   livro: Livro;
   generoLivro: any[] = [
     { name: 'Ficção Científica', value: 'FICCAO_CIENTIFICA' },
@@ -29,11 +30,12 @@ export class PaginaLivrosCadastroComponent implements OnInit{
   ];
 
 
+
   constructor(
     private livroService: CrudService<Livro>,
     private router: Router,
     private fb: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
   ) {
     this.livro = new Livro();
     this.livroForm = this.fb.group({
@@ -49,6 +51,7 @@ export class PaginaLivrosCadastroComponent implements OnInit{
 
 
   ngOnInit(): void {
+
   }
 
   updateForm(livro: Livro) {
@@ -97,7 +100,6 @@ export class PaginaLivrosCadastroComponent implements OnInit{
 
     const formValues = this.livroForm.value;
     this.livro = new Livro(formValues);
-
     if (this.livro.id) {
       // Se o livro já possui um ID, é uma atualização
       this.updateLivro(this.livro);
@@ -130,6 +132,7 @@ export class PaginaLivrosCadastroComponent implements OnInit{
     const url = this.router.createUrlTree([route], navigationExtras).toString();
     this.router.navigate([url], navigationExtras);
   }
+
 
 
 }
