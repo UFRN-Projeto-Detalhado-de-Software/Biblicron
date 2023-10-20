@@ -70,7 +70,7 @@ public class EmprestimoController {
             Emprestimo emprestimo = emprestimoService.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(emprestimo);
         } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
