@@ -39,9 +39,9 @@ public class LivroController {
             BeanUtils.copyProperties(livro, livroDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(livroService.save(livro));
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -57,7 +57,7 @@ public class LivroController {
             Livro livro = livroService.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(livro);
         } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class LivroController {
             List<Livro> sugestoes = this.livroService.generateSugestoesById(id);
             return ResponseEntity.status(HttpStatus.OK).body(sugestoes);
         } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
     @DeleteMapping("/{id}")
@@ -78,7 +78,7 @@ public class LivroController {
             Livro deleted = this.livroService.delete(id);
             return ResponseEntity.status(HttpStatus.OK).body("Book of id " + deleted.getId() + " deleted successfully.");
         } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -92,10 +92,10 @@ public class LivroController {
             Livro livroAtualizado = this.livroService.update(id, livro);
             return ResponseEntity.status(HttpStatus.OK).body(livroAtualizado);
         } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
         catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
