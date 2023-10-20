@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -26,38 +27,38 @@ public class EmprestimoController {
     }
 
     @PostMapping("/realizar")
-    public ResponseEntity<String> realizarEmprestimo(@RequestBody EmprestimoRequestDto emprestimoRequestDTO) {
+    public ResponseEntity<Object> realizarEmprestimo(@RequestBody @Valid EmprestimoRequestDto emprestimoRequestDTO) {
         String nomeLivro = emprestimoRequestDTO.getNomeLivro();
         String nomeUsuario = emprestimoRequestDTO.getNomeUsuario();
 
         try {
-            Emprestimo emprestimo = emprestimoService.realizarEmprestimo(nomeLivro, nomeUsuario);
-            return ResponseEntity.ok("Empréstimo realizado com sucesso. ID do empréstimo: " + emprestimo.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(emprestimoService.realizarEmprestimo(nomeLivro, nomeUsuario));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.badRequest().body("Erro ao realizar empréstimo: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
 
     @PostMapping("/devolucao/{id}")
-    public ResponseEntity<String> realizarDevolucao(@PathVariable Long id) {
+    public ResponseEntity<Object> realizarDevolucao(@PathVariable Long id) {
         try {
-            Emprestimo emprestimo = emprestimoService.realizarDevolucao(id);
-            return ResponseEntity.ok("Devolução realizada com sucesso para o empréstimo ID: " + emprestimo.getId());
+            return ResponseEntity.status(HttpStatus.OK).body(emprestimoService.realizarDevolucao(id));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
     @PostMapping("/estender/{id}")
-    public ResponseEntity<String> estenderPrazo(@PathVariable Long id){
+    public ResponseEntity<Object> estenderPrazo(@PathVariable Long id){
         try{
-            Emprestimo emprestimo = emprestimoService.estenderVencimento(id);
-            return ResponseEntity.ok("Vencimento estendido com sucesso para o empréstimo ID: " + emprestimo.getId());
+            return ResponseEntity.status(HttpStatus.OK).body(emprestimoService.estenderVencimento(id));
         }
-        catch (EntityNotFoundException | IllegalStateException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        catch (IllegalStateException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
 
@@ -67,10 +68,10 @@ public class EmprestimoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> findLivroById(@PathVariable(value = "id") Long id){
+    public ResponseEntity<Object> findEmprestimoById(@PathVariable(value = "id") Long id){
         Optional<Emprestimo> emprestimoOptional = emprestimoService.findById(id);
         if(!emprestimoOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Empréstimo não encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found: Empréstimo não encontrado.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(emprestimoOptional.get());
     }

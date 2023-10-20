@@ -5,6 +5,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CrudService} from "../../services/CrudService";
 import {ActivatedRoute, NavigationExtras, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
+import {UserType} from "../../models/User";
+import {Path} from "../../utilities/Path";
 
 @Component({
   selector: 'app-pagina-livros-cadastro',
@@ -110,7 +112,7 @@ export class PaginaLivrosCadastroComponent implements OnInit{
   }
 
   createLivro(livro: Livro) {
-    this.http.post('http://localhost:8081/livro', livro).subscribe((data: any) => {
+    this.livroService.create(Path.LOCALHOST + '/livro', livro).subscribe((data: any) => {
       this.livroForm.reset(); // Limpa o formulário
       this.redirectWithSuccessMessage('pagina-livros', 'Livro cadastrado com sucesso!');
     });
@@ -118,7 +120,7 @@ export class PaginaLivrosCadastroComponent implements OnInit{
   }
 
   updateLivro(livro: Livro) {
-    this.http.put('http://localhost:8081/livro', this.livroForm.value).subscribe((data: any) => {
+    this.livroService.update(Path.LOCALHOST + '/livro', livro.id, livro).subscribe((data: any) => {
       this.livroForm.reset(); // Limpa o formulário
       this.redirectWithSuccessMessage('pagina-livros', 'Livro editado com sucesso!');
     });

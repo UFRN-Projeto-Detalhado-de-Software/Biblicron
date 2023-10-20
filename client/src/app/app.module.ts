@@ -14,6 +14,7 @@ import { PaginaEmprestimosCadastroComponent } from './pages/pagina-emprestimos-c
 import { PaginaUsuariosCadastroComponent } from './pages/pagina-usuarios-cadastro/pagina-usuarios-cadastro.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import {TableModule} from "primeng/table";
 
 @NgModule({
   declarations: [
@@ -28,12 +29,13 @@ import {HttpClientModule} from "@angular/common/http";
     PaginaEmprestimosCadastroComponent,
     PaginaUsuariosCadastroComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    HttpClientModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        TableModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

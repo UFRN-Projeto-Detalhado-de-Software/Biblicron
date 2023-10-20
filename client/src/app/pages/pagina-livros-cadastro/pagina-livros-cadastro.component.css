@@ -21,6 +21,7 @@
 /* Estilos para os campos de entrada (input) e seleção (select) */
 input[type="text"],
 input[type="number"],
+input[type="date"],
 select {
   width: 100%;
   padding: 10px; /* Ajuste o padding conforme necessário */

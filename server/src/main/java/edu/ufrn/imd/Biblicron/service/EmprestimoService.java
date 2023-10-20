@@ -46,16 +46,16 @@ public class EmprestimoService {
     public Emprestimo realizarEmprestimo(String nomeLivro, String nomeUsuario) {
 
         Livro livro = livroRepository.findByTitulo(nomeLivro)
-                .orElseThrow(() -> new EntityNotFoundException("Livro não encontrado com o nome: " + nomeLivro));
+                .orElseThrow(() -> new EntityNotFoundException("Not Found: Livro não encontrado com o nome: " + nomeLivro));
 
         User usuario = userRepository.findByUsername(nomeUsuario)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o nome: " + nomeUsuario));
+                .orElseThrow(() -> new EntityNotFoundException("Not Found: Usuário não encontrado com o nome: " + nomeUsuario));
 
         // Verifica se o usuário já possui um empréstimo em andamento
         Optional<Emprestimo> emprestimoEmAndamento = emprestimoRepository.findByUsuarioAndReturnDateIsNull(usuario);
 
         if (emprestimoEmAndamento.isPresent()) {
-            throw new IllegalStateException("Usuário já possui um empréstimo em andamento.");
+            throw new IllegalStateException("Conflict: Usuário já possui um empréstimo em andamento.");
         }
 
         // Verifica se há livros disponíveis no estoque
@@ -68,13 +68,13 @@ public class EmprestimoService {
             emprestimo.setReturnDate(null);
 
             // Atualiza a quantidade disponível no estoque
-            livro.setQuantidade(livro.getQuantidadeDisponivel() - 1);
+            livro.setQuantidadeDisponivel(livro.getQuantidadeDisponivel() - 1);
             livroRepository.save(livro);
 
             // Salve o empréstimo no banco de dados
             return emprestimoRepository.save(emprestimo);
         } else {
-            throw new IllegalStateException("Livro não disponível no estoque para empréstimo");
+            throw new IllegalStateException("Conflict: Livro não disponível no estoque para empréstimo");
         }
     }
 
@@ -93,17 +93,16 @@ public class EmprestimoService {
                 Livro livro = emprestimo.getLivro();
 
                 // Incrementar a quantidade disponível no estoque
-                livro.setQuantidade(livro.getQuantidade() + 1);
+                livro.setQuantidadeDisponivel(livro.getQuantidadeDisponivel() + 1);
 
                 // Salve as alterações no banco de dados
                 livroRepository.save(livro);
-                emprestimoRepository.save(emprestimo);
 
-                return emprestimo;
+                return emprestimoRepository.save(emprestimo);
             }
         }
 
-        throw new EntityNotFoundException("Empréstimo não encontrado com o ID: " + id);
+        throw new EntityNotFoundException("Not Found: Empréstimo não encontrado com o ID: " + id);
     }
 
     @Transactional
@@ -114,20 +113,17 @@ public class EmprestimoService {
             Emprestimo emprestimo = emprestimoOptional.get();
 
             if(emprestimo.getReturnDate() != null){
-                throw new IllegalStateException("Devolução já realizada para empréstimo de ID: " + id);
+                throw new IllegalStateException("Conflict: Devolução já realizada para empréstimo de ID: " + id);
             }
 
             if (LocalDate.now().isBefore(emprestimo.getMaxReturnDate())) {
                 // Soma mais 15 dias à Data máxima de devolução
                 emprestimo.setMaxReturnDate(emprestimo.getMaxReturnDate().plusDays(15));
-
-                emprestimoRepository.save(emprestimo);
-
-                return emprestimo;
+                return emprestimoRepository.save(emprestimo);
             }
         }
 
-        throw new EntityNotFoundException("Empréstimo não encontrado com o ID: " + id);
+        throw new EntityNotFoundException("Not Found: Empréstimo não encontrado com o ID: " + id);
     }
 
     public List<Emprestimo> findEmprestimosComMaxReturnDate(LocalDate dataLimite) {

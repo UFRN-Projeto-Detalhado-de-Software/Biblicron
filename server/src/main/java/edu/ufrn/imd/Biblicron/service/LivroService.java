@@ -7,6 +7,8 @@ import edu.ufrn.imd.Biblicron.repository.IEmprestimoRepository;
 import edu.ufrn.imd.Biblicron.repository.ILivroRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -28,6 +30,37 @@ public class LivroService {
 
     @Transactional
     public Livro save(Livro livro) {
+        if(existsByTitulo(livro.getTitulo())){
+            throw new IllegalStateException("Conflict: Book Title is already in use.");
+        }
+        if(livro.getTitulo().length() > 255){
+            throw new IllegalArgumentException("Length Required: Book Title must have less than 255 characters.");
+        }
+        if(livro.getAutor().length() > 255){
+            throw new IllegalArgumentException("Length Required: Author's Name must have less than 255 characters.");
+        }
+        if(livro.getQuantidade() > 1000){
+            throw new IllegalArgumentException("Length Required: Quantity of books must be less than 1000 characters.");
+        }
+        if(livro.getGeneros() != null && livro.getGeneros().size() > 3){
+            throw new IllegalArgumentException("Length Required: Um livro precisa ter, no máximo, 3 gêneros.");
+        }
+        if (livro.getGeneros() == null || livro.getGeneros().isEmpty()) {
+            throw new IllegalArgumentException("Length Required: Um livro precisa ter, no mínimo, 1 gênero.");
+        }
+        if(livro.getPaginas() <= 0){
+            throw new IllegalArgumentException("Length Required: Quantidade de páginas precisa ser maior que 0.");
+        }
+        if(livro.getDataPublicacao() == null){
+            throw new IllegalArgumentException("Length Required: É necessário informar a data de publicação do livro");
+        }
+        if(livro.getQuantidade() <= 0){
+            throw new IllegalArgumentException("Length Required: Quantidade de livros precisa ser maior que 0.");
+        }
+        if(livro.getQuantidadeDisponivel() <= 0){
+            throw new IllegalArgumentException("Length Required: Quantidade Disponível de livros precisa ser maior que 0.");
+        }
+
         return livroRepository.save(livro);
     }
 

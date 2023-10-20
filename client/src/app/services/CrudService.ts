@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,11 +8,13 @@ import { Observable } from 'rxjs';
 export class CrudService<T> {
   constructor(private http: HttpClient) {}
 
-  getAll(endpoint: string): Observable<T[]> {
+  listAll(endpoint: string, page: number, size: number, order: string, direction: string): Observable<T[]> {
+    endpoint = `${endpoint}?page=${page}&size=${size}&sort=${order}&direction=${direction}`;
+    console.log(endpoint);
     return this.http.get<T[]>(endpoint);
   }
 
-  getOne(endpoint: string, id: number): Observable<T> {
+  listById(endpoint: string, id: number): Observable<T> {
     return this.http.get<T>(`${endpoint}/${id}`);
   }
 
