@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -26,15 +27,33 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto){
+        if(userService.existsByUsername(userDto.getUsername())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Username already in use.");
+        }
+        if(userService.existsByEmail(userDto.getEmail())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Email already in use");
+        }
+        if(userDto.getUsername().length() > 50){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Username must have less than 50 characters.");
+        }
+        if(userDto.getPassword().length() > 50){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Password must have less than 50 characters.");
+        }
+        if(userDto.getEmail().length() > 50){
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: Email must have less than 50 characters.");
+        }
+        if (userDto.getUserType() == null) {
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Length Required: O campo 'userType' não pode ser nulo.");
+        }
+
         var user = new User();
         try {
             BeanUtils.copyProperties(user, userDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
-        } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
         }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
     }
 
     @GetMapping
@@ -44,38 +63,41 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> findUserById(@PathVariable(value = "id")Long id){
+        Optional<User> userOptional = userService.findById(id);
 
-        try {
-            User user = userService.findById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(user);
-        } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+        if(!userOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
+        return ResponseEntity.status(HttpStatus.OK).body(userOptional.get());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "id")Long id){
-        try {
-            User user = userService.delete(id);
-            return ResponseEntity.status(HttpStatus.OK).body(user);
-        } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+        Optional<User> userOptional = userService.findById(id);
+        if(!userOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
+        userService.delete(userOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body("User of id " + id + " deleted successfully.");
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateUser(@PathVariable(value = "id")Long id,
                                              @RequestBody @Valid UserDto userDto){
 
-        var user = new User();
+        Optional<User> userOptional = userService.findById(id);
+        if(!userOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+
+        var user = userOptional.get();
         try {
             BeanUtils.copyProperties(user, userDto);
-            User userAtualizado = this.userService.update(user);
-            return ResponseEntity.status(HttpStatus.OK).body(userAtualizado);
-        } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+        user.setId(userOptional.get().getId());
+
+        return ResponseEntity.status(HttpStatus.OK).body(userService.save(user));
     }
 }

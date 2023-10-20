@@ -13,6 +13,7 @@ import { PaginaLivrosCadastroComponent } from './pages/pagina-livros-cadastro/pa
 import { PaginaEmprestimosCadastroComponent } from './pages/pagina-emprestimos-cadastro/pagina-emprestimos-cadastro.component';
 import { PaginaUsuariosCadastroComponent } from './pages/pagina-usuarios-cadastro/pagina-usuarios-cadastro.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import {ReactiveFormsModule} from "@angular/forms";
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

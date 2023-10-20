@@ -57,17 +57,17 @@
               <input formControlName="paginas" type="number" id="paginas" placeholder="Informe o número de páginas">
             </div>
           </div>
-          <div class="row mb-6">
-            <label class="col-lg-4 col-form-label required fw-bold fs-6">
-              Gênero
-            </label>
-            <div class="col-lg-8 fv-row">
-              <select formControlName="genero" id="genero">
-                <option *ngFor="let genre of generoLivro" [value]="genre">{{ genre }}</option>
-              </select>
+            <div class="row mb-6">
+              <label class="col-lg-4 col-form-label required fw-bold fs-6">
+                Gênero (Até 3 Gêneros)
+              </label>
+              <div class="col-lg-8 fv-row">
+                <select formControlName="generos" id="generos" multiple>
+                  <option *ngFor="let genre of generoLivro" [value]="genre.value">{{ genre.name }}</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
         <div class="card-footer d-flex justify-content-end py-6 px-9">
           <button title="Botão para submeter formulário" type="button" class="btn btn-primary"
                   (click)="submit()">

@@ -38,12 +38,8 @@ public class EmprestimoService {
         return emprestimoRepository.findAll(pageable);
     }
 
-    public Emprestimo findById(Long id){
-        Optional<Emprestimo> emprestimo = emprestimoRepository.findById(id);
-        if(!emprestimo.isPresent()) {
-            throw new IllegalStateException("Empréstimo not found.");
-        }
-        return emprestimo.get();
+    public Optional<Emprestimo> findById(Long id){
+        return emprestimoRepository.findById(id);
     }
 
     @Transactional
@@ -128,9 +124,6 @@ public class EmprestimoService {
                 emprestimoRepository.save(emprestimo);
 
                 return emprestimo;
-            }
-            else {
-                throw new IllegalStateException("Empréstimo " + id + " vencido");
             }
         }
 

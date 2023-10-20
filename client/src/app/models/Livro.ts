@@ -8,7 +8,7 @@ export class Livro implements Entidade{
   quantidadeDisponivel: number = 0;
   dataPublicacao: Date = new Date();
   paginas: number = 0;
-  genero: Genero[] = [];
+  generos: Genero[] = [];
 
 
   constructor(value: Object = {}) {
@@ -18,13 +18,13 @@ export class Livro implements Entidade{
 }
 
 export enum Genero {
- FICCAO_CIENTIFICA = "Ficção Científica",
-  FANTASIA = "Fantasia",
-  ROMANCE = "Romance",
-  SUSPENSE = "Suspense",
-  AVENTURA = "Aventura",
-  BIOGRAFIA = "Biografia",
-  DIDATICOS = "Didáticos",
-  HISTORIA_EM_QUADRINHOS = "História em Quadrinhos",
-  CLASSICOS = "Clássicos"
+  FICCAO_CIENTIFICA = "FICCAO_CIENTIFICA",
+  FANTASIA = "FANTASIA",
+  ROMANCE = "ROMANCE",
+  SUSPENSE = "SUSPENSE",
+  AVENTURA = "AVENTURA",
+  BIOGRAFIA = "BIOGRAFIA",
+  DIDATICOS = "DIDATICOS",
+  HISTORIA_EM_QUADRINHOS = "HISTORIA_EM_QUADRINHOS",
+  CLASSICOS = "CLASSICOS"
 }

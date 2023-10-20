@@ -28,32 +28,6 @@ public class LivroService {
 
     @Transactional
     public Livro save(Livro livro) {
-
-        if(this.existsByTitulo(livro.getTitulo())){
-            throw new IllegalStateException("Conflict: Book Title already exists.");
-        }
-        if(livro.getTitulo().length() > 255){
-            throw new IllegalStateException("Length Required: Book Title must have less than 255 characters.");
-        }
-        if(livro.getAutor().length() > 255){
-            throw new IllegalStateException("Length Required: Author's Name must have less than 255 characters.");
-        }
-        if(livro.getQuantidade() > 1000){
-            throw new IllegalStateException("Length Required: Quantity of books must be less than 1000 characters.");
-        }
-        if(livro.getGeneros() != null && livro.getGeneros().size() > 3){
-            throw new IllegalStateException("Length Required: Um livro precisa ter, no máximo, 3 gêneros.");
-        }
-        if (livro.getGeneros() == null || livro.getGeneros().isEmpty()) {
-            throw new IllegalStateException("Length Required: Um livro precisa ter, no mínimo, 1 gênero.");
-        }
-        if(livro.getPaginas() <= 0){
-            throw new IllegalStateException("Length Required: Quantidade de páginas precisa ser maior que 0.");
-        }
-        if(livro.getDataPublicacao() == null){
-            throw new IllegalStateException("Length Required: É necessário informar a data de publicação do livro");
-        }
-
         return livroRepository.save(livro);
     }
 
@@ -64,50 +38,21 @@ public class LivroService {
         return livroRepository.findAll(pageable);
     }
 
-    public Livro findById(Long id) {
-        Optional<Livro> livroOptional = livroRepository.findById(id);
-        if(!livroOptional.isPresent()){
-            throw new IllegalStateException("Book not found.");
-        }
-        return livroOptional.get();
+    public Optional<Livro> findById(Long id) {
+        return livroRepository.findById(id);
     }
 
     public Optional<Livro> findByTitulo(String titulo){
         return livroRepository.findByTitulo(titulo);
     }
-    
-    @Transactional
-    public Livro update(Long id, Livro livro) {
-      
-        Optional<Livro> livroOptional = this.findByTitulo(livro.getTitulo());
-
-        Livro savedLivro = this.findById(livroOptional.get().getId());
-
-        if(savedLivro.getId() != id){
-            throw new IllegalStateException("Conflict: Book Title is already in use.");
-        }
-
-        if(livro.getGeneros() != null && livro.getGeneros().size() > 3){
-            throw new IllegalStateException("Length Required: Um livro precisa ter, no máximo, 3 gêneros.");
-        }
-        if (livro.getGeneros() == null || livro.getGeneros().isEmpty()) {
-            throw new IllegalStateException("Length Required: Um livro precisa ter, no mínimo, 1 gênero.");
-        }
-
-        savedLivro.setGeneros(livro.getGeneros());
-
-        return this.save(savedLivro);
-    }
 
     @Transactional
-    public Livro delete(Long id) {
-        Livro livro = this.findById(id);
-        livroRepository.delete(livro);;
-        return livro;
+    public void delete(Livro livro) {
+        livroRepository.delete(livro);
     }
 
     public List<Livro> generateSugestoesById(Long id){
-        Livro livro = this.findById(id);
+        var livro = livroRepository.findById(id).get();
 
         var sugestoes = new HashMap<Livro, Integer>();
         var usuariosPercorridos = new HashMap<User, Boolean>();

@@ -1,59 +1,54 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Subject} from "rxjs";
 import {Genero, Livro} from "../../models/Livro";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CrudService} from "../../services/CrudService";
 import {NavigationExtras, Router} from "@angular/router";
-import {MessageService} from 'primeng/api';
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-pagina-livros-cadastro',
   templateUrl: './pagina-livros-cadastro.component.html',
-  styleUrls: ['./pagina-livros-cadastro.component.css']
+  styleUrls: ['./pagina-livros-cadastro.component.css'],
+  providers: [CrudService]
 })
 export class PaginaLivrosCadastroComponent implements OnInit{
   private destroy$ = new Subject();
+  public livroForm: FormGroup;
   livro: Livro;
   generoLivro: any[] = [
-    { name: 'Ficção Científica', value: 'Ficção Científica' },
-    { name: 'Fantasia', value: 'Fantasia' },
-    { name: 'Romance', value: 'Romance' },
-    { name: 'Suspense', value: 'Suspense' },
-    { name: 'Aventura', value: 'Aventura' },
-    { name: 'Biografia', value: 'Biografia' },
-    { name: 'Didáticos', value: 'Didáticos' },
-    { name: 'História em Quadrinhos', value: 'História em Quadrinhos' },
-    { name: 'Clássicos', value: 'Clássicos' }
+    { name: 'Ficção Científica', value: 'FICCAO_CIENTIFICA' },
+    { name: 'Fantasia', value: 'FANTASIA' },
+    { name: 'Romance', value: 'ROMANCE' },
+    { name: 'Suspense', value: 'SUSPENSE' },
+    { name: 'Aventura', value: 'AVENTURA' },
+    { name: 'Biografia', value: 'BIOGRAFIA' },
+    { name: 'Didáticos', value: 'DIDATICOS' },
+    { name: 'História em Quadrinhos', value: 'HISTORIA_EM_QUADRINHOS' },
+    { name: 'Clássicos', value: 'CLASSICOS' }
   ];
 
 
   constructor(
     private livroService: CrudService<Livro>,
     private router: Router,
-    private messageService: MessageService,
     private fb: FormBuilder,
-    public livroForm: FormGroup,
+    private http: HttpClient
   ) {
     this.livro = new Livro();
+    this.livroForm = this.fb.group({
+      titulo: ['', Validators.required],
+      autor: ['', Validators.required],
+      quantidade: ['', Validators.required],
+      quantidadeDisponivel: ['', Validators.required],
+      dataPublicacao: ['', Validators.required],
+      paginas: ['', Validators.required],
+      generos: [[]],
+    });
   }
 
 
   ngOnInit(): void {
-    this.initForm();
-  }
-
-  initForm() {
-    this.livroForm = this.fb.group({
-      id: [null],
-      titulo: ['', Validators.required],
-      autor: ['', Validators.required],
-      quantidade: [Validators.required],
-      quantidadeDisponivel: [Validators.required],
-      dataPublicacao: [Validators.required],
-      paginas: [Validators.required],
-      genero: [Validators.required],
-
-    });
   }
 
   updateForm(livro: Livro) {
@@ -65,7 +60,7 @@ export class PaginaLivrosCadastroComponent implements OnInit{
       quantidadeDisponivel: livro.quantidadeDisponivel,
       dataPublicacao: livro.dataPublicacao,
       paginas: livro.paginas,
-      genero: livro.paginas
+      generos: livro.generos
     });
 
   }
@@ -79,7 +74,6 @@ export class PaginaLivrosCadastroComponent implements OnInit{
 
   private markAllFieldsAsTouchedAndShowErrorMessage(): void {
     this.livroForm.markAllAsTouched();
-    this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Formulário inválido!' });
   }
 
   submit() {
@@ -114,27 +108,18 @@ export class PaginaLivrosCadastroComponent implements OnInit{
   }
 
   createLivro(livro: Livro) {
-    const endpoint = 'localhost:4200/livro'; // Define o endpoint para criar um novo livro
-    this.livroService.create(endpoint, livro).subscribe(
-      (response: Livro) => {
-        this.redirectWithSuccessMessage('pagina-livros', 'Livro cadastrado com sucesso!');
-      },
-      (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível cadastrar o livro!' });
-      },
-    );
+    this.http.post('http://localhost:8081/livro', livro).subscribe((data: any) => {
+      this.livroForm.reset(); // Limpa o formulário
+      this.redirectWithSuccessMessage('pagina-livros', 'Livro cadastrado com sucesso!');
+    });
+    console.log(livro);
   }
 
   updateLivro(livro: Livro) {
-    const endpoint = `livros/${livro.id}`; // Define o endpoint para atualizar o livro existente
-    this.livroService.update(endpoint, livro.id, livro).subscribe(
-      (response: Livro) => {
-        this.redirectWithSuccessMessage('pagina-livros', 'Livro atualizado com sucesso!');
-      },
-      (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível atualizar o livro!' });
-      },
-    );
+    this.http.put('http://localhost:8081/livro', this.livroForm.value).subscribe((data: any) => {
+      this.livroForm.reset(); // Limpa o formulário
+      this.redirectWithSuccessMessage('pagina-livros', 'Livro editado com sucesso!');
+    });
   }
 
 
