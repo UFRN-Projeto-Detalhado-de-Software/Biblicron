@@ -31,9 +31,9 @@ public class UserController {
             BeanUtils.copyProperties(user, userDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -49,7 +49,7 @@ public class UserController {
             User user = userService.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(user);
         } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public class UserController {
             User user = userService.delete(id);
             return ResponseEntity.status(HttpStatus.OK).body(user);
         } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -73,9 +73,9 @@ public class UserController {
             User userAtualizado = this.userService.update(user);
             return ResponseEntity.status(HttpStatus.OK).body(userAtualizado);
         } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
