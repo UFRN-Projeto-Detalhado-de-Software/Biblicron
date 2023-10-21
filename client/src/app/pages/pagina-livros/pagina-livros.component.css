@@ -7,6 +7,59 @@
   flex-direction: column;
 }
 
+.form-table{
+  margin: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 60%;
+  min-width: 500px;
+}
+
 .button{
   width: 50px;
 }
+
+.styled-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+//box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.table-header {
+  background-color: #357808;
+  color: #ffffff;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+}
+
+.table-row{
+  border-bottom: 1px solid #dddddd;
+}
+
+.table-row:nth-of-type(even) {
+  background-color: rgba(114, 114, 114, 0.07);
+}
+
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #25376c;
+}
+
+.styled-table tbody tr.active-row {
+  font-weight: bold;
+  color: #25376c;
+}
+
+
+
+
+

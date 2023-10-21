@@ -16,7 +16,7 @@ export class PaginaLivrosComponent implements OnInit{
   listaLivros: Livro[] = [];
   totalRecords: any = 0;
   page = 0;
-  size = 4;
+  size = 10;
   order: string = "id";
   direction: string = "DESC";
   constructor(
@@ -42,5 +42,10 @@ export class PaginaLivrosComponent implements OnInit{
         this.listaLivros = res.content;
         this.totalRecords = res.totalElements;
       });
+  }
+
+  onPageChange(event: any) {
+    this.page = event.first / event.rows;
+    this.loadTable(); // Recarregue os dados da página atual.
   }
 }

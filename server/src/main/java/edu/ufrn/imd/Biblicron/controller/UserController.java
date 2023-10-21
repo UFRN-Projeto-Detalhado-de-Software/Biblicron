@@ -46,7 +46,7 @@ public class UserController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/listAll")
     public ResponseEntity<Page<User>> findAllUsers(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(pageable));
     }

@@ -62,8 +62,8 @@ public class EmprestimoController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<Page<Emprestimo>> findAllLivros(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+    @GetMapping("/listAll")
+    public ResponseEntity<Page<Emprestimo>> findAllEmprestimos(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(emprestimoService.findAll(pageable));
     }
 
