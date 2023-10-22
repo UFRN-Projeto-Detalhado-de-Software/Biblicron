@@ -6,6 +6,8 @@ import {NavigationExtras, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {User, UserType} from "../../models/User";
 import {Path} from "../../utilities/Path";
+import {Livro} from "../../models/Livro";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-pagina-usuarios-cadastro',
@@ -15,6 +17,7 @@ import {Path} from "../../utilities/Path";
 })
 export class PaginaUsuariosCadastroComponent implements OnInit{
   private destroy$ = new Subject();
+  // @ts-ignore
   public userForm: FormGroup;
   errorMessage: string = '';
   user: User;
@@ -30,19 +33,32 @@ export class PaginaUsuariosCadastroComponent implements OnInit{
     private userService: CrudService<User>,
     private router: Router,
     private fb: FormBuilder,
+    private messageService: MessageService,
   ) {
     this.user = new User();
+    this.initForm();
+  }
+
+
+  ngOnInit(): void {
+    const state = history.state; // Obtém o estado da rota
+    if (state && state.user) {
+      const user: User = state.user;
+      const id = user.id;
+      if (id) {
+        this.handleUser(user);
+      }
+    }
+  }
+
+  initForm(): void{
     this.userForm = this.fb.group({
+      id: [null],
       username: ['', Validators.required],
       password: ['', Validators.required],
       userType: [],
       email: ['', Validators.required]
     });
-  }
-
-
-  ngOnInit(): void {
-
   }
 
   updateForm(user: User) {
@@ -56,7 +72,7 @@ export class PaginaUsuariosCadastroComponent implements OnInit{
 
   }
 
-  private handleLivro(user: User) {
+  private handleUser(user: User) {
     if (user) {
       this.user = user;
       this.updateForm(user);
@@ -89,7 +105,7 @@ export class PaginaUsuariosCadastroComponent implements OnInit{
     const formValues = this.userForm.value;
     this.user = new User(formValues);
     if (this.user.id) {
-      // Se o livro já possui um ID, é uma atualização
+      // Se o user já possui um ID, é uma atualização
       this.updateUser(this.user);
     } else {
       // Caso contrário, é uma criação
@@ -98,14 +114,18 @@ export class PaginaUsuariosCadastroComponent implements OnInit{
   }
 
   createUser(user: User) {
-    this.userService.create(Path.LOCALHOST + '/user', user).subscribe((data: any) => {
-      this.userForm.reset(); // Limpa o formulário
-      this.redirectWithSuccessMessage('pagina-usuarios', 'Usuario cadastrado com sucesso!');
-    });
+    this.userService.create(Path.LOCALHOST + '/user', user).subscribe(sucess => {
+      const sucessMessage: string = this.userForm.value.id ? 'User atualizado com sucesso!' : 'User ' + user.username + ' cadastrado com sucesso!';
+      this.redirectWithSuccessMessage('pagina-usuarios', sucessMessage);
+    },
+      error => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: this.userForm.value.id ? "Não foi possível atualizar o usuário!" : "Não foi possível cadastrar o usuário!" });
+      }
+      );
   }
 
   updateUser(user: User) {
-    this.userService.update(Path.LOCALHOST + '/user', user.id, user).subscribe((data: any) => {
+    this.userService.update(Path.LOCALHOST + '/user/update', user.id, user).subscribe((data: any) => {
       this.userForm.reset(); // Limpa o formulário
       this.redirectWithSuccessMessage('pagina-usuarios', 'Usuario editado com sucesso!');
     });

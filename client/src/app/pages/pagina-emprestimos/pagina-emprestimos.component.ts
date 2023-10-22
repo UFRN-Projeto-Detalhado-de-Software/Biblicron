@@ -31,7 +31,7 @@ export class PaginaEmprestimosComponent implements OnInit{
   page = 0;
   size = 10;
   sort: string = "";
-  direction: string = "";
+  direction: string = "DESC";
 
 
   ngOnInit(): void {
@@ -124,5 +124,12 @@ export class PaginaEmprestimosComponent implements OnInit{
         console.log("Não foi possível remover o feriado de id: " + item.id);
       }
     });
+  }
+
+  paginacao(event: any): void {
+    this.page = event.first / this.size;
+    this.sort = event.sortField;
+    this.direction = event.sortOrder;
+    this.loadTable();
   }
 }

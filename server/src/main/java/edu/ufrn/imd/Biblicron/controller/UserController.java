@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping("/listAll")
-    public ResponseEntity<Page<User>> findAllUsers(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)Pageable pageable){
+    public ResponseEntity<Page<User>> findAllUsers(@PageableDefault(page = 0, size = 10, sort = "username", direction = Sort.Direction.ASC)Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(pageable));
     }
 
@@ -58,7 +58,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userOptional.get());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "id")Long id){
         Optional<User> userOptional = userService.findById(id);
         if(!userOptional.isPresent()){
@@ -68,7 +68,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("User of id " + id + " deleted successfully.");
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Object> updateUser(@PathVariable(value = "id")Long id,
                                              @RequestBody @Valid UserDto userDto){
 

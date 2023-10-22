@@ -82,12 +82,19 @@ export class PaginaLivrosComponent implements OnInit{
         );
       },
       reject: () => {
-        console.log("Não foi possível remover o feriado de id: " + item.id);
+        console.log("Não foi possível remover o livro de id: " + item.id);
       }
     });
   }
 
-  editLivro(livro: Livro) {
+  editItem(livro: Livro) {
     this.router.navigate(['/pagina-livros-cadastro'], { state: { livro } });
+  }
+
+  paginacao(event: any): void {
+    this.page = event.first / this.size;
+    this.order = event.sortField;
+    this.direction = event.sortOrder;
+    this.loadTable();
   }
 }

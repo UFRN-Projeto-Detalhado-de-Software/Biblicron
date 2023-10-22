@@ -133,7 +133,7 @@ export class PaginaLivrosCadastroComponent implements OnInit{
         this.redirectWithSuccessMessage('pagina-livros', successMessage);
       },
       error => {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: this.livroForm.value.id ? "Não foi possível atualizar o feriado!" : "Não foi possível cadastrar o feriado!" });
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: this.livroForm.value.id ? "Não foi possível atualizar o livro!" : "Não foi possível cadastrar o livro!" });
       },
       () => {
       }

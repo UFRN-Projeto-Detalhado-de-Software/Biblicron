@@ -19,7 +19,7 @@
     </div>
     <div class="separator"></div>
   <div class="table-responsive styled-table" style="margin-bottom: 100px; max-height: 600px; overflow-y: auto;">
-    <p-table class="" dataKey="id" [value]="listaLivros" [lazy]="true" [rowHover]="true" [lazyLoadOnInit]="false"
+    <p-table class="" dataKey="id" [value]="listaLivros" [lazy]="true" [rowHover]="true" [lazyLoadOnInit]="false" (onLazyLoad)="paginacao($event)"
              [rows]="size" [totalRecords]="totalRecords" [showCurrentPageReport]="true" (onPage)="onPageChange($event)"
              [globalFilterFields]="['titulo', 'autor', 'quantidadeDisponivel']">
       <ng-template pTemplate="header">
@@ -37,7 +37,7 @@
           <td>{{ item.quantidadeDisponivel }}</td>
           <td>
             <button class="pi pi-pencil btn btn-sm btn-icon btn-active-light-primary edit-button"
-                    (click)="editLivro(item)"> Editar
+                    (click)="editItem(item)"> Editar
             </button>
             <button class="pi pi-trash btn btn-sm btn-icon btn-active-light-primary delete-button"
                     (click)="confirmarRemocao($event, item)"> Excluir

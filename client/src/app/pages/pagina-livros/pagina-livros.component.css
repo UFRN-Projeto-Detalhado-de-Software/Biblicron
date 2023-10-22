@@ -22,12 +22,12 @@
   font-family: 'Poppins', sans-serif;
   font-size: 20px;
   display: flex;
-  justify-content: space-between; /* Para alinhar o botão à direita */
-  align-items: center; /* Para centralizar verticalmente os itens */
+  justify-content: space-between;
+  align-items: center;
 }
 
 .addButton {
-  font-family: 'Poppins', sans-serif; /* Se desejar aplicar a mesma fonte */
+  font-family: 'Poppins', sans-serif;
   background-color: #357808;
   color: #fff;
   border: none;
@@ -41,9 +41,9 @@
 }
 
 .separator {
-  height: 2px; /* Altura da linha separadora */
-  background-color: #ddd; /* Cor de fundo da linha separadora */
-  margin: 20px 0; /* Espaçamento acima e abaixo da linha separadora */
+  height: 2px;
+  background-color: #ddd;
+  margin: 20px 0;
 }
 
 .button{

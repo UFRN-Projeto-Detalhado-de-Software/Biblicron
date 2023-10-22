@@ -17,16 +17,16 @@
     </div>
     <div class="separator"></div>
     <div class="table-responsive styled-table" style="margin-bottom: 50px; max-height: 600px; overflow-y: auto;">
-      <p-table class="" dataKey="id" [value]="listaEmprestimos" [lazy]="true" [rowHover]="true" [lazyLoadOnInit]="false"
+      <p-table class="" dataKey="id" [value]="listaEmprestimos" [lazy]="true" [rowHover]="true" [lazyLoadOnInit]="false" (onLazyLoad)="paginacao($event)"
                [rows]="size" [totalRecords]="totalRecords" [showCurrentPageReport]="true" (onPage)="onPageChange($event)"
-               [globalFilterFields]="['titulo', 'autor', 'quantidadeDisponivel']">
+               [globalFilterFields]="['usuario.username', 'id', 'loanDate', 'maxReturnDate', 'returnDate']">
         <ng-template pTemplate="header">
           <tr class="table-header">
-            <th> Nome do Usuário</th>
-            <th> ID do emprétimo</th>
-            <th> Data de empréstimo</th>
-            <th> Data máxima de retorno</th>
-            <th> Data de retorno </th>
+            <th pSortableColumn="usuario.username"> Nome do Usuário</th>
+            <th pSortableColumn="id"> ID do emprétimo</th>
+            <th pSortableColumn="loanDate"> Data de empréstimo</th>
+            <th pSortableColumn="maxReturnDate"> Data máxima de retorno</th>
+            <th pSortableColumn="returnDate"> Data de retorno </th>
             <th>Ações</th>
           </tr>
         </ng-template>
