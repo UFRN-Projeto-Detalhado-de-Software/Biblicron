@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -30,35 +31,41 @@ public class LivroService {
 
     @Transactional
     public Livro save(Livro livro) {
+        ArrayList<String> errosLog = new ArrayList<>();
+
         if(existsByTitulo(livro.getTitulo())){
-            throw new IllegalStateException("Conflict: Book Title is already in use.");
+            errosLog.add("Conflict: Book Title is already in use.\n");
         }
         if(livro.getTitulo().length() > 255){
-            throw new IllegalArgumentException("Length Required: Book Title must have less than 255 characters.");
+            errosLog.add("Length Required: Book Title must have less than 255 characters.\n");
         }
         if(livro.getAutor().length() > 255){
-            throw new IllegalArgumentException("Length Required: Author's Name must have less than 255 characters.");
+            errosLog.add("Length Required: Author's Name must have less than 255 characters.\n");
         }
         if(livro.getQuantidade() > 1000){
-            throw new IllegalArgumentException("Length Required: Quantity of books must be less than 1000 characters.");
+            errosLog.add("Length Required: Quantity of books must be less than 1000 characters.\n");
         }
         if(livro.getGeneros() != null && livro.getGeneros().size() > 3){
-            throw new IllegalArgumentException("Length Required: Um livro precisa ter, no máximo, 3 gêneros.");
+            errosLog.add("Length Required: Um livro precisa ter, no máximo, 3 gêneros.\n");
         }
         if (livro.getGeneros() == null || livro.getGeneros().isEmpty()) {
-            throw new IllegalArgumentException("Length Required: Um livro precisa ter, no mínimo, 1 gênero.");
+            errosLog.add("Length Required: Um livro precisa ter, no mínimo, 1 gênero.\n");
         }
         if(livro.getPaginas() <= 0){
-            throw new IllegalArgumentException("Length Required: Quantidade de páginas precisa ser maior que 0.");
+            errosLog.add("Length Required: Quantidade de páginas precisa ser maior que 0.\n");
         }
         if(livro.getDataPublicacao() == null){
-            throw new IllegalArgumentException("Length Required: É necessário informar a data de publicação do livro");
+            errosLog.add("Length Required: É necessário informar a data de publicação do livro\n");
         }
         if(livro.getQuantidade() <= 0){
-            throw new IllegalArgumentException("Length Required: Quantidade de livros precisa ser maior que 0.");
+            errosLog.add("Length Required: Quantidade de livros precisa ser maior que 0.\n");
         }
         if(livro.getQuantidadeDisponivel() <= 0){
-            throw new IllegalArgumentException("Length Required: Quantidade Disponível de livros precisa ser maior que 0.");
+            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser maior que 0.\n");
+        }
+
+        if(!errosLog.isEmpty()){
+            throw new IllegalStateException(String.valueOf(errosLog));
         }
 
         return livroRepository.save(livro);
@@ -81,6 +88,14 @@ public class LivroService {
 
     @Transactional
     public void delete(Livro livro) {
+        List<Emprestimo> currentUsage = emprestimoRepository.findByLivroAndReturnDateIsNull(livro);
+        List<Emprestimo> isAtLoanLog = emprestimoRepository.findByLivro(livro);
+        if(!(currentUsage.isEmpty())){
+            throw new IllegalStateException("Conflict: Livro " + livro.getTitulo() + " está emprestado");
+        }
+        if(!(isAtLoanLog.isEmpty())){
+            throw new IllegalStateException("Conflict: Livro " + livro.getTitulo() + " está nos registros de empréstimo e não pode ser apagado");
+        }
         livroRepository.delete(livro);
     }
 
@@ -111,5 +126,55 @@ public class LivroService {
             System.out.println("Pessoas que pegaram este livro também pegaram " + sugestao.getKey().getTitulo() + " num total de " + sugestao.getValue() + " vezes.");
         }
         return sortedSugestions.stream().map(sugestao -> sugestao.getKey()).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Livro update(Livro livro) {
+        ArrayList<String> errosLog = new ArrayList<>();
+
+        Optional<Livro> livroByTitulo = findByTitulo(livro.getTitulo());
+
+        if(livroByTitulo.isPresent() && livroByTitulo.get().getId() != livro.getId()){
+            errosLog.add("Conflict: Book Title is already in use.\n");
+        }
+
+        Optional<Livro> livroOptional = findById(livro.getId());
+        if(!livroOptional.isPresent()){
+            errosLog.add("Not Found: Book not found.");
+        }
+
+        if(livro.getTitulo().length() > 255){
+            errosLog.add("Length Required: Book Title must have less than 255 characters.\n");
+        }
+        if(livro.getAutor().length() > 255){
+            errosLog.add("Length Required: Author's Name must have less than 255 characters.\n");
+        }
+        if(livro.getQuantidade() > 1000){
+            errosLog.add("Length Required: Quantity of books must be less than 1000 characters.\n");
+        }
+        if(livro.getGeneros() != null && livro.getGeneros().size() > 3){
+            errosLog.add("Length Required: Um livro precisa ter, no máximo, 3 gêneros.\n");
+        }
+        if (livro.getGeneros() == null || livro.getGeneros().isEmpty()) {
+            errosLog.add("Length Required: Um livro precisa ter, no mínimo, 1 gênero.\n");
+        }
+        if(livro.getPaginas() <= 0){
+            errosLog.add("Length Required: Quantidade de páginas precisa ser maior que 0.\n");
+        }
+        if(livro.getDataPublicacao() == null){
+            errosLog.add("Length Required: É necessário informar a data de publicação do livro\n");
+        }
+        if(livro.getQuantidade() <= 0){
+            errosLog.add("Length Required: Quantidade de livros precisa ser maior que 0.\n");
+        }
+        if(livro.getQuantidadeDisponivel() <= 0){
+            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser maior que 0.\n");
+        }
+
+        if(!errosLog.isEmpty()){
+            throw new IllegalStateException(String.valueOf(errosLog));
+        }
+
+        return livroRepository.save(livro);
     }
 }

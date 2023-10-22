@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Subject} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {Genero, Livro} from "../../models/Livro";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CrudService} from "../../services/CrudService";
@@ -7,6 +7,7 @@ import {ActivatedRoute, NavigationExtras, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {UserType} from "../../models/User";
 import {Path} from "../../utilities/Path";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-pagina-livros-cadastro',
@@ -16,6 +17,8 @@ import {Path} from "../../utilities/Path";
 })
 export class PaginaLivrosCadastroComponent implements OnInit{
   private destroy$ = new Subject();
+
+  // @ts-ignore
   public livroForm: FormGroup;
   errorMessage: string = '';
   livro: Livro;
@@ -36,11 +39,18 @@ export class PaginaLivrosCadastroComponent implements OnInit{
   constructor(
     private livroService: CrudService<Livro>,
     private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private http: HttpClient,
+    private messageService: MessageService,
   ) {
     this.livro = new Livro();
+    this.initForm();
+  }
+
+  initForm(): void{
     this.livroForm = this.fb.group({
+      id: [null],
       titulo: ['', Validators.required],
       autor: ['', Validators.required],
       quantidade: ['', Validators.required],
@@ -51,9 +61,15 @@ export class PaginaLivrosCadastroComponent implements OnInit{
     });
   }
 
-
   ngOnInit(): void {
-
+    const state = history.state; // Obtém o estado da rota
+    if (state && state.livro) {
+      const livro: Livro = state.livro;
+      const id = livro.id;
+      if (id) {
+        this.handleLivro(livro);
+      }
+    }
   }
 
   updateForm(livro: Livro) {
@@ -112,15 +128,20 @@ export class PaginaLivrosCadastroComponent implements OnInit{
   }
 
   createLivro(livro: Livro) {
-    this.livroService.create(Path.LOCALHOST + '/livro', livro).subscribe((data: any) => {
-      this.livroForm.reset(); // Limpa o formulário
-      this.redirectWithSuccessMessage('pagina-livros', 'Livro cadastrado com sucesso!');
-    });
-    console.log(livro);
+    this.livroService.create(Path.LOCALHOST + '/livro', livro).subscribe(success => {
+        const successMessage: string = this.livroForm.value.id ? 'Livro atualizado com sucesso!' : 'Livro ' + livro.titulo +  ' cadastrado com sucesso!';
+        this.redirectWithSuccessMessage('pagina-livros', successMessage);
+      },
+      error => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: this.livroForm.value.id ? "Não foi possível atualizar o feriado!" : "Não foi possível cadastrar o feriado!" });
+      },
+      () => {
+      }
+    );
   }
 
   updateLivro(livro: Livro) {
-    this.livroService.update(Path.LOCALHOST + '/livro', livro.id, livro).subscribe((data: any) => {
+    this.livroService.update(Path.LOCALHOST + '/livro/update', livro.id, livro).subscribe((data: any) => {
       this.livroForm.reset(); // Limpa o formulário
       this.redirectWithSuccessMessage('pagina-livros', 'Livro editado com sucesso!');
     });

@@ -41,9 +41,6 @@ public class UserController {
         catch (IllegalStateException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
-        catch (IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body(e.getMessage());
-        }
     }
 
     @GetMapping("/listAll")

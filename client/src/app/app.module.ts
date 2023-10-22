@@ -16,6 +16,11 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {TableModule} from "primeng/table";
 import {PaginatorModule} from "primeng/paginator";
+import {ConfirmationService, MessageService} from "primeng/api";
+import {DialogModule} from "primeng/dialog";
+import {ConfirmPopupModule} from "primeng/confirmpopup";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ToastModule} from "primeng/toast";
 
 @NgModule({
   declarations: [
@@ -30,15 +35,19 @@ import {PaginatorModule} from "primeng/paginator";
     PaginaEmprestimosCadastroComponent,
     PaginaUsuariosCadastroComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        TableModule,
-        PaginatorModule
-    ],
-  providers: [],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    TableModule,
+    PaginatorModule,
+    DialogModule,
+    ConfirmPopupModule,
+    BrowserAnimationsModule,
+    ToastModule
+  ],
+  providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

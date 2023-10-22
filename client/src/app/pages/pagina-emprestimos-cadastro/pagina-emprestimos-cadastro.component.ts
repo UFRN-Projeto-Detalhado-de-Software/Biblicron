@@ -80,8 +80,8 @@ export class PaginaEmprestimosCadastroComponent implements OnInit{
 
   create(emprestimo: Emprestimo) {
     this.emprestimoService.create(Path.LOCALHOST + '/emprestimo/realizar', emprestimo).subscribe((data: any) => {
-      this.emprestimoForm.reset(); // Limpa o formulário
-      this.redirectWithSuccessMessage('pagina-emprestimos', 'Emprestimo cadastrado com sucesso!');
+      const successMessage: string = this.emprestimoForm.value.id ? 'Empréstimo atualizado com sucesso!' : 'Empréstimo cadastrado com sucesso!';
+      this.redirectWithSuccessMessage('pagina-emprestimos', successMessage);
     });
   }
 

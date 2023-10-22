@@ -46,10 +46,6 @@ public class LivroController {
         catch (IllegalStateException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
-        catch (IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body(e.getMessage());
-        }
-
     }
 
     @GetMapping("/listAll")
@@ -74,49 +70,41 @@ public class LivroController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(livroService.generateSugestoesById(id));
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> deleteLivro(@PathVariable(value = "id") Long id){
         Optional<Livro> livroOptional = livroService.findById(id);
         if(!livroOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
         }
-        livroService.delete(livroOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Book of id " + id + " deleted successfully.");
+        try{
+            livroService.delete(livroOptional.get());
+            return ResponseEntity.status(HttpStatus.OK).body("Book of id " + id + " deleted successfully.");
+        } catch (IllegalStateException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Object> updateLivro(@PathVariable(value = "id") Long id,
                                               @RequestBody @Valid LivroDto livroDto){
 
-        //Checando se um livro já existe com esse título e se o id do livro é diferente do livro que o usuário deseja editar
-        Optional<Livro> livroByTitulo = livroService.findByTitulo(livroDto.getTitulo());
-        if(livroByTitulo.isPresent() && livroByTitulo.get().getId() != id){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Book Title is already in use.");
-        }
-
-        Optional<Livro> livroOptional = livroService.findById(id);
-        if(!livroOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found: Book not found.");
-        }
-        var livro = livroOptional.get();
+        var livro = new Livro();
         try {
             BeanUtils.copyProperties(livro, livroDto);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
-        livro.setId(livroOptional.get().getId());
+        livro.setId(id);
+        System.out.println(livro.getQuantidadeDisponivel());
 
         // Configure os gêneros do livro
         livro.setGeneros(livroDto.getGeneros());
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(livroService.save(livro));
+            return ResponseEntity.status(HttpStatus.CREATED).body(livroService.update(livro));
         }
         catch (IllegalStateException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
-        catch (IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body(e.getMessage());
         }
     }
 

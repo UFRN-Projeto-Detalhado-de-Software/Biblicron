@@ -42,11 +42,15 @@ select[multiple] {
   height: auto;
 }
 
-button {
+.button {
   background-color: #357808;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   padding: 10px;
+}
+
+.button:hover{
+  background-color: #1976d2;
 }

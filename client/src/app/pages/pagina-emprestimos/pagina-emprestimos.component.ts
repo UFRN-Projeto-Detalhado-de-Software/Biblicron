@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {Subject, takeUntil} from "rxjs";
-import {Livro} from "../../models/Livro";
 import {CrudService} from "../../services/CrudService";
 import {Path} from "../../utilities/Path";
 import {User} from "../../models/User";
 import {Emprestimo} from "../../models/Emprestimo";
+import {ConfirmationService, MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-pagina-emprestimos',
@@ -15,7 +15,11 @@ import {Emprestimo} from "../../models/Emprestimo";
 export class PaginaEmprestimosComponent implements OnInit{
   constructor(
     private router: Router,
-    private userService: CrudService<User>) {
+    private userService: CrudService<User>,
+    private confirmationService: ConfirmationService,
+    private emprestimoService: CrudService<Emprestimo>,
+    private messageService: MessageService
+  ) {
   }
   NavigateOnClick(){
     this.router.navigate(['/pagina-emprestimos-cadastro']);
@@ -26,18 +30,28 @@ export class PaginaEmprestimosComponent implements OnInit{
   totalRecords: any = 0;
   page = 0;
   size = 10;
-  order: string = "id";
-  direction: string = "DESC";
+  sort: string = "";
+  direction: string = "";
 
 
   ngOnInit(): void {
     this.loadTable();
   }
 
+  ngAfterViewInit(): void {
+    if (history.state) {
+      const message = history.state.message;
+      if (message) {
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: message });
+        history.replaceState(null, '');
+      }
+    }
+  }
+
   loadTable(): void {
 
     // Faça a chamada para carregar os livros e assine o Observable.
-    this.userService.listAll(Path.LOCALHOST + '/emprestimo/listAll', this.page, this.size, this.order, this.direction )
+    this.userService.listAll(Path.LOCALHOST + '/emprestimo/listAll', this.page, this.size, this.sort, this.direction )
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
         this.listaEmprestimos = res.content;
@@ -48,5 +62,67 @@ export class PaginaEmprestimosComponent implements OnInit{
   onPageChange(event: any) {
     this.page = event.first / event.rows;
     this.loadTable(); // Recarregue os dados da página atual.
+  }
+
+  estenderEmprestimo(event: Event, item: Emprestimo) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Tem certeza que deseja estender?',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      accept: () => {
+        this.emprestimoService.extend(Path.LOCALHOST + '/emprestimo/estender', item.id).subscribe(success => {
+            this.loadTable();
+            this.messageService.add({
+              severity: 'success', summary: 'Sucesso', detail: 'Prazo do empréstimo de id: ' + item.id + ' estendido com sucesso!'
+            });
+          },
+          error => {
+            this.loadTable();
+            this.messageService.add({
+              severity: 'error', summary: 'Erro', detail: 'Erro ao estender empréstimo.'
+            });
+          },
+          () => {
+            this.loadTable();
+          }
+        );
+      },
+      reject: () => {
+        console.log("Não foi possível remover o feriado de id: " + item.id);
+      }
+    });
+  }
+
+  devolverEmprestimo(event: Event, item: Emprestimo) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Tem certeza que deseja devolver?',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      accept: () => {
+        this.emprestimoService.return(Path.LOCALHOST + '/emprestimo/devolucao', item.id).subscribe(success => {
+            this.loadTable();
+            this.messageService.add({
+              severity: 'success', summary: 'Sucesso', detail: 'Devolução do Empréstimo de id: ' + item.id + ' realizada!'
+            });
+          },
+          error => {
+            this.loadTable();
+            this.messageService.add({
+              severity: 'error', summary: 'Erro', detail: 'Erro ao devolver empréstimo.'
+            });
+          },
+          () => {
+            this.loadTable();
+          }
+        );
+      },
+      reject: () => {
+        console.log("Não foi possível remover o feriado de id: " + item.id);
+      }
+    });
   }
 }

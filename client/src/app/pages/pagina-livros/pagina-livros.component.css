@@ -12,10 +12,38 @@
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 60%;
+  width: 70%;
   min-width: 500px;
+}
+
+.page-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between; /* Para alinhar o botão à direita */
+  align-items: center; /* Para centralizar verticalmente os itens */
+}
+
+.addButton {
+  font-family: 'Poppins', sans-serif; /* Se desejar aplicar a mesma fonte */
+  background-color: #357808;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.addButton:hover {
+  background-color: #1976d2;
+}
+
+.separator {
+  height: 2px; /* Altura da linha separadora */
+  background-color: #ddd; /* Cor de fundo da linha separadora */
+  margin: 20px 0; /* Espaçamento acima e abaixo da linha separadora */
 }
 
 .button{
@@ -28,7 +56,8 @@
   font-size: 0.9em;
   font-family: sans-serif;
   min-width: 400px;
-//box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 .table-header {
@@ -50,16 +79,18 @@
   background-color: rgba(114, 114, 114, 0.07);
 }
 
-.styled-table tbody tr:last-of-type {
-  border-bottom: 2px solid #25376c;
+
+.edit-button, .delete-button {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 5px 10px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.styled-table tbody tr.active-row {
-  font-weight: bold;
-  color: #25376c;
+.edit-button:hover, .delete-button:hover {
+  background-color: #6fa9d6;
 }
-
-
-
-
-

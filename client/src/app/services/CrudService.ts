@@ -10,7 +10,6 @@ export class CrudService<T> {
 
   listAll(endpoint: string, page: number, size: number, order: string, direction: string): Observable<T[]> {
     endpoint = `${endpoint}?page=${page}&size=${size}&sort=${order}&direction=${direction}`;
-    console.log(endpoint);
     return this.http.get<T[]>(endpoint);
   }
 
@@ -28,5 +27,13 @@ export class CrudService<T> {
 
   delete(endpoint: string, id: number): Observable<void> {
     return this.http.delete<void>(`${endpoint}/${id}`);
+  }
+
+  extend(endpoint: string, id: number): Observable<T> {
+    return this.http.post<T>(`${endpoint}/${id}`, null);
+  }
+
+  return(endpoint: string, id: number): Observable<T> {
+    return this.http.post<T>(`${endpoint}/${id}`, null);
   }
 }

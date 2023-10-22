@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -29,23 +30,29 @@ public class UserService {
     }
 
     public User save(User user) {
+        ArrayList<String> errosLog = new ArrayList<>();
+
         if(existsByUsername(user.getUsername())){
-            throw new IllegalStateException("Conflict: Username already in use.");
+            errosLog.add("Conflict: Username already in use.\n");
         }
         if(existsByEmail(user.getEmail())){
-            throw new IllegalStateException("Conflict: Email already in use");
+            errosLog.add("Conflict: Email already in use\n");
         }
         if(user.getUsername().length() > 50){
-            throw new IllegalArgumentException("Length Required: Username must have less than 50 characters.");
+            errosLog.add("Length Required: Username must have less than 50 characters.\n");
         }
         if(user.getPassword().length() > 50){
-            throw new IllegalArgumentException("Length Required: Password must have less than 50 characters.");
+            errosLog.add("Length Required: Password must have less than 50 characters.\n");
         }
         if(user.getEmail().length() > 50){
-            throw new IllegalArgumentException("Length Required: Email must have less than 50 characters.");
+            errosLog.add("Length Required: Email must have less than 50 characters.\n");
         }
         if (user.getUserType() == null) {
-            throw new IllegalArgumentException("Length Required: O campo 'userType' não pode ser nulo.");
+            errosLog.add("Length Required: O campo 'userType' não pode ser nulo.\n");
+        }
+
+        if(!errosLog.isEmpty()){
+            throw new IllegalStateException(String.valueOf(errosLog));
         }
 
         return userRepository.save(user);

@@ -33,8 +33,6 @@ public class EmprestimoController {
 
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(emprestimoService.realizarEmprestimo(nomeLivro, nomeUsuario));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
@@ -63,7 +61,7 @@ public class EmprestimoController {
     }
 
     @GetMapping("/listAll")
-    public ResponseEntity<Page<Emprestimo>> findAllEmprestimos(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+    public ResponseEntity<Page<Emprestimo>> findAllEmprestimos(@PageableDefault(page = 0, size = 10, sort = "loanDate", direction = Sort.Direction.DESC) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(emprestimoService.findAll(pageable));
     }
 

@@ -12,10 +12,38 @@
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 60%;
+  width: 70%;
   min-width: 500px;
+}
+
+.page-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between; /* Para alinhar o botão à direita */
+  align-items: center; /* Para centralizar verticalmente os itens */
+}
+
+.addButton {
+  font-family: 'Poppins', sans-serif; /* Se desejar aplicar a mesma fonte */
+  background-color: #357808;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.addButton:hover {
+  background-color: #1976d2;
+}
+
+.separator {
+  height: 2px; /* Altura da linha separadora */
+  background-color: #ddd; /* Cor de fundo da linha separadora */
+  margin: 20px 0; /* Espaçamento acima e abaixo da linha separadora */
 }
 
 .button{
@@ -28,7 +56,8 @@
   font-size: 0.9em;
   font-family: sans-serif;
   min-width: 400px;
-//box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 .table-header {
@@ -59,7 +88,17 @@
   color: #25376c;
 }
 
+.edit-button, .delete-button {
+  background-color: #4CAF50; /* Cor verde */
+  color: #fff; /* Cor da fonte branca */
+  padding: 5px 10px; /* Espaçamento interno */
+  margin: 5px; /* Margem à direita para separar os botões */
+  border: none; /* Remove a borda */
+  border-radius: 5px; /* Borda arredondada */
+  cursor: pointer; /* Cursor de mão ao passar o mouse */
+  transition: background-color 0.3s, color 0.3s; /* Efeito de transição para hover */
+}
 
-
-
-
+.edit-button:hover, .delete-button:hover {
+  background-color: #6fa9d6; /* Cor azul claro no hover */
+}

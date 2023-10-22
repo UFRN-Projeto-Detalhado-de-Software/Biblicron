@@ -16,6 +16,7 @@ const routes: Routes = [
   { path: 'pagina-emprestimos', component: PaginaEmprestimosComponent },
   { path: 'pagina-usuarios', component: PaginaUsuariosComponent },
   { path: 'pagina-livros-cadastro', component: PaginaLivrosCadastroComponent },
+  { path: 'pagina-livros-cadastro/:id', component: PaginaLivrosCadastroComponent },
   { path: 'pagina-emprestimos-cadastro', component: PaginaEmprestimosCadastroComponent },
   { path: 'pagina-usuarios-cadastro', component: PaginaUsuariosCadastroComponent },
   { path: '**', redirectTo: 'pagina-inicial' },
