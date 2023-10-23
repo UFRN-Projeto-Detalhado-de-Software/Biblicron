@@ -42,7 +42,7 @@ public class EmprestimoController {
     public ResponseEntity<Object> realizarDevolucao(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(emprestimoService.realizarDevolucao(id));
-        } catch (EntityNotFoundException e) {
+        } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

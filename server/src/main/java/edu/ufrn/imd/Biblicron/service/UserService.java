@@ -39,22 +39,22 @@ public class UserService {
         ArrayList<String> errosLog = new ArrayList<>();
 
         if(existsByUsername(user.getUsername())){
-            errosLog.add("Conflict: Username already in use.\n");
+            errosLog.add("Conflict: Username already in use.");
         }
         if(existsByEmail(user.getEmail())){
-            errosLog.add("Conflict: Email already in use\n");
+            errosLog.add("Conflict: Email already in use.");
         }
         if(user.getUsername().length() > 50){
-            errosLog.add("Length Required: Username must have less than 50 characters.\n");
+            errosLog.add("Length Required: Username must have less than 50 characters.");
         }
         if(user.getPassword().length() > 50){
-            errosLog.add("Length Required: Password must have less than 50 characters.\n");
+            errosLog.add("Length Required: Password must have less than 50 characters.");
         }
         if(user.getEmail().length() > 50){
-            errosLog.add("Length Required: Email must have less than 50 characters.\n");
+            errosLog.add("Length Required: Email must have less than 50 characters.");
         }
         if (user.getUserType() == null) {
-            errosLog.add("Length Required: O campo 'userType' não pode ser nulo.\n");
+            errosLog.add("Length Required: O campo 'userType' não pode ser nulo.");
         }
 
         if(!errosLog.isEmpty()){
@@ -98,12 +98,12 @@ public class UserService {
 
         Optional<User> userByUsername = findByUsername(user.getUsername());
         if(userByUsername.isPresent() && userByUsername.get().getId() != user.getId() ){
-            errosLog.add("Conflict: Username is already in use.\n");
+            errosLog.add("Conflict: Username is already in use.");
         }
 
         Optional<User> userByEmail = findByEmail(user.getEmail());
         if(userByEmail.isPresent() && userByEmail.get().getId() != user.getId()){
-            errosLog.add("Conflict: Email is already in user.\n");
+            errosLog.add("Conflict: Email is already in user.");
         }
 
         Optional<User> userOptional = findById(user.getId());
@@ -112,16 +112,16 @@ public class UserService {
         }
 
         if(user.getUsername().length() > 50){
-            errosLog.add("Length Required: Username must have less than 50 characters.\n");
+            errosLog.add("Length Required: Username must have less than 50 characters.");
         }
         if(user.getPassword().length() > 50){
-            errosLog.add("Length Required: Password must have less than 50 characters.\n");
+            errosLog.add("Length Required: Password must have less than 50 characters.");
         }
         if(user.getEmail().length() > 50){
-            errosLog.add("Length Required: Email must have less than 50 characters.\n");
+            errosLog.add("Length Required: Email must have less than 50 characters.");
         }
         if (user.getUserType() == null) {
-            errosLog.add("Length Required: O campo 'userType' não pode ser nulo.\n");
+            errosLog.add("Length Required: O campo 'userType' não pode ser nulo.");
         }
 
         if(!errosLog.isEmpty()){
@@ -133,16 +133,16 @@ public class UserService {
     public User login(String userName, String password) {
         ArrayList<String> errosLog = new ArrayList<>();
         if(userName == null){
-            errosLog.add("Empty: Necessário Informar o campo de UserName.\n");
+            errosLog.add("Empty: Necessário Informar o campo de UserName.");
         }
         if(password == null){
-            errosLog.add("Empty: Necessário Informar o campo de Password.\n");
+            errosLog.add("Empty: Necessário Informar o campo de Password.");
         }
         if(userName.length() > 50){
-            errosLog.add("Length Required: Username must have less than 50 characters.\n");
+            errosLog.add("Length Required: Username must have less than 50 characters.");
         }
         if(password.length() > 50){
-            errosLog.add("Length Required: Password must have less than 50 characters.\n");
+            errosLog.add("Length Required: Password must have less than 50 characters.");
         }
 
         Optional<User> userOptional = userRepository.findByUsernameAndPassword(userName, password);
@@ -157,7 +157,7 @@ public class UserService {
         }
 
         if(!userOptional.isPresent()){
-            errosLog.add("Not Found: User credentials not found.\n");
+            errosLog.add("Not Found: User credentials not found.");
         }
 
         if(!errosLog.isEmpty()){

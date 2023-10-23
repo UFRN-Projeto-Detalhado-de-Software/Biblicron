@@ -129,11 +129,19 @@ export class PaginaLivrosCadastroComponent implements OnInit{
 
   createLivro(livro: Livro) {
     this.livroService.create(Path.LOCALHOST + '/livro', livro).subscribe(success => {
-        const successMessage: string = this.livroForm.value.id ? 'Livro atualizado com sucesso!' : 'Livro ' + livro.titulo +  ' cadastrado com sucesso!';
+        const successMessage: string = 'Livro ' + livro.titulo +  ' cadastrado com sucesso!';
         this.redirectWithSuccessMessage('pagina-livros', successMessage);
       },
       error => {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: this.livroForm.value.id ? "Não foi possível atualizar o livro!" : "Não foi possível cadastrar o livro!" });
+        let errorMessage: string;
+
+        if (error.error) {
+          errorMessage = JSON.stringify(error.error); // Converte o objeto de resposta em uma string
+        } else {
+          errorMessage = "Não foi possível cadastrar o usuário!";
+        }
+
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: errorMessage });
       },
       () => {
       }
@@ -142,9 +150,21 @@ export class PaginaLivrosCadastroComponent implements OnInit{
 
   updateLivro(livro: Livro) {
     this.livroService.update(Path.LOCALHOST + '/livro/update', livro.id, livro).subscribe((data: any) => {
-      this.livroForm.reset(); // Limpa o formulário
-      this.redirectWithSuccessMessage('pagina-livros', 'Livro editado com sucesso!');
-    });
+      const sucessMessage: string = 'User ' + livro.titulo + ' editado com sucesso!';
+      this.redirectWithSuccessMessage('pagina-usuarios', sucessMessage);
+    },
+      error => {
+        let errorMessage: string;
+
+        if (error.error) {
+          errorMessage = JSON.stringify(error.error); // Converte o objeto de resposta em uma string
+        } else {
+          errorMessage = "Não foi possível cadastrar o usuário!";
+        }
+
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: errorMessage });
+      }
+      );
   }
 
 

@@ -100,6 +100,7 @@ public class EmprestimoService {
 
     @Transactional
     public Emprestimo realizarDevolucao(Long id) {
+        ArrayList<String> errosLog = new ArrayList<>();
         Optional<Emprestimo> emprestimoOptional = emprestimoRepository.findById(id);
 
         if (emprestimoOptional.isPresent()) {
@@ -119,30 +120,48 @@ public class EmprestimoService {
 
                 return emprestimoRepository.save(emprestimo);
             }
+            else{
+                errosLog.add("Conflict: empréstimo já retornado");
+            }
         }
-
-        throw new EntityNotFoundException("Not Found: Empréstimo não encontrado com o ID: " + id);
+        else{
+            errosLog.add("Not Found: Empréstimo em andamento não encontrado com o ID: " + id);
+        }
+        if(!errosLog.isEmpty()){
+            throw new IllegalStateException(String.valueOf(errosLog));
+        }
+        return null;
     }
 
     @Transactional
     public Emprestimo estenderVencimento(Long id) {
+        ArrayList<String> errosLog = new ArrayList<>();
         Optional<Emprestimo> emprestimoOptional = emprestimoRepository.findById(id);
 
         if (emprestimoOptional.isPresent()) {
             Emprestimo emprestimo = emprestimoOptional.get();
 
             if(emprestimo.getReturnDate() != null){
-                throw new IllegalStateException("Conflict: Devolução já realizada para empréstimo de ID: " + id);
+                errosLog.add("Conflict: Devolução já realizada para empréstimo de ID: " + id);
             }
-
-            if (LocalDate.now().isBefore(emprestimo.getMaxReturnDate())) {
-                // Soma mais 15 dias à Data máxima de devolução
-                emprestimo.setMaxReturnDate(emprestimo.getMaxReturnDate().plusDays(15));
-                return emprestimoRepository.save(emprestimo);
+            else{
+                if (LocalDate.now().isBefore(emprestimo.getMaxReturnDate()) || LocalDate.now().isEqual(emprestimo.getMaxReturnDate())){
+                    // Soma mais 15 dias à Data máxima de devolução
+                    emprestimo.setMaxReturnDate(emprestimo.getMaxReturnDate().plusDays(15));
+                    return emprestimoRepository.save(emprestimo);
+                }
+                else{
+                    errosLog.add("Conflict: Empréstimo já vencido.");
+                }
             }
         }
-
-        throw new EntityNotFoundException("Not Found: Empréstimo não encontrado com o ID: " + id);
+        else{
+            errosLog.add("Not Found: Empréstimo não encontrado com o ID: " + id);
+        }
+        if(!errosLog.isEmpty()){
+            throw new IllegalStateException(String.valueOf(errosLog));
+        }
+        return null;
     }
 
     public List<Emprestimo> findEmprestimosComMaxReturnDate(LocalDate dataLimite) {

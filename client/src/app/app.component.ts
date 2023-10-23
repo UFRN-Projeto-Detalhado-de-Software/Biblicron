@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {NavigationStart, Router} from "@angular/router";
 import {AuthService} from "./services/AuthService";
 
@@ -7,7 +7,7 @@ import {AuthService} from "./services/AuthService";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'client';
   hideAsideMenu: boolean = false;
 
@@ -19,9 +19,16 @@ export class AppComponent {
       // Se o usuário estiver logado, redirecione para a página principal (ou outra página)
       this.router.navigate(['/pagina-inicial']);
     }
+    window.onbeforeunload = function() {
+      localStorage.removeItem('currentUser');
+      return '';
+    };
   }
 
   isUserAuthenticated(): boolean {
     return this.authService.isLoggedIn(); // Implemente esse método em AuthService
+  }
+
+  ngOnInit(): void {
   }
 }

@@ -115,20 +115,40 @@ export class PaginaUsuariosCadastroComponent implements OnInit{
 
   createUser(user: User) {
     this.userService.create(Path.LOCALHOST + '/user', user).subscribe(sucess => {
-      const sucessMessage: string = this.userForm.value.id ? 'User atualizado com sucesso!' : 'User ' + user.username + ' cadastrado com sucesso!';
+      const sucessMessage: string = 'User ' + user.username + ' cadastrado com sucesso!';
       this.redirectWithSuccessMessage('pagina-usuarios', sucessMessage);
     },
       error => {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: this.userForm.value.id ? "Não foi possível atualizar o usuário!" : "Não foi possível cadastrar o usuário!" });
+        let errorMessage: string;
+
+        if (error.error) {
+          errorMessage = JSON.stringify(error.error); // Converte o objeto de resposta em uma string
+        } else {
+          errorMessage = "Não foi possível cadastrar o usuário!";
+        }
+
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: errorMessage });
       }
-      );
+    );
   }
 
   updateUser(user: User) {
-    this.userService.update(Path.LOCALHOST + '/user/update', user.id, user).subscribe((data: any) => {
-      this.userForm.reset(); // Limpa o formulário
-      this.redirectWithSuccessMessage('pagina-usuarios', 'Usuario editado com sucesso!');
-    });
+    this.userService.update(Path.LOCALHOST + '/user/update', user.id, user).subscribe(sucess => {
+      const sucessMessage: string = 'User ' + user.username + ' editado com sucesso!';
+      this.redirectWithSuccessMessage('pagina-usuarios', sucessMessage);
+    },
+      error => {
+        let errorMessage: string;
+
+        if (error.error) {
+          errorMessage = JSON.stringify(error.error); // Converte o objeto de resposta em uma string
+        } else {
+          errorMessage = "Não foi possível cadastrar o usuário!";
+        }
+
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: errorMessage });
+      }
+      );
   }
 
 

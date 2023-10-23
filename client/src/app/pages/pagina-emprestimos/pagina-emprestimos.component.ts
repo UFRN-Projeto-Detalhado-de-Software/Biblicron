@@ -79,10 +79,15 @@ export class PaginaEmprestimosComponent implements OnInit{
             });
           },
           error => {
-            this.loadTable();
-            this.messageService.add({
-              severity: 'error', summary: 'Erro', detail: 'Erro ao estender empréstimo.'
-            });
+            let errorMessage: string;
+
+            if (error.error) {
+              errorMessage = JSON.stringify(error.error); // Converte o objeto de resposta em uma string
+            } else {
+              errorMessage = "Não foi possível cadastrar o usuário!";
+            }
+
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: errorMessage });
           },
           () => {
             this.loadTable();
@@ -90,7 +95,7 @@ export class PaginaEmprestimosComponent implements OnInit{
         );
       },
       reject: () => {
-        console.log("Não foi possível remover o feriado de id: " + item.id);
+        console.log("Não foi possível estender o empréstimo de id: " + item.id);
       }
     });
   }
@@ -110,13 +115,18 @@ export class PaginaEmprestimosComponent implements OnInit{
             });
           },
           error => {
-            this.loadTable();
-            this.messageService.add({
-              severity: 'error', summary: 'Erro', detail: 'Erro ao devolver empréstimo.'
-            });
+            let errorMessage: string;
+
+            if (error.error) {
+              errorMessage = JSON.stringify(error.error); // Converte o objeto de resposta em uma string
+            } else {
+              errorMessage = "Não foi possível devolver o empréstimo de id: " + item.id;
+            }
+
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: errorMessage });
           },
           () => {
-            this.loadTable();
+            console.log("Não foi possível devolver o empréstimo de id: " + item.id);
           }
         );
       },

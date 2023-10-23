@@ -34,37 +34,37 @@ public class LivroService {
         ArrayList<String> errosLog = new ArrayList<>();
 
         if(existsByTitulo(livro.getTitulo())){
-            errosLog.add("Conflict: Book Title is already in use.\n");
+            errosLog.add("Conflict: Book Title is already in use.");
         }
         if(livro.getTitulo().length() > 255){
-            errosLog.add("Length Required: Book Title must have less than 255 characters.\n");
+            errosLog.add("Length Required: Book Title must have less than 255 characters.");
         }
         if(livro.getAutor().length() > 255){
-            errosLog.add("Length Required: Author's Name must have less than 255 characters.\n");
+            errosLog.add("Length Required: Author's Name must have less than 255 characters.");
         }
         if(livro.getQuantidade() > 1000){
-            errosLog.add("Length Required: Quantity of books must be less than 1000 characters.\n");
+            errosLog.add("Length Required: Quantity of books must be less than 1000 characters.");
         }
         if(livro.getGeneros() != null && livro.getGeneros().size() > 3){
-            errosLog.add("Length Required: Um livro precisa ter, no máximo, 3 gêneros.\n");
+            errosLog.add("Length Required: Um livro precisa ter, no máximo, 3 gêneros.");
         }
         if (livro.getGeneros() == null || livro.getGeneros().isEmpty()) {
-            errosLog.add("Length Required: Um livro precisa ter, no mínimo, 1 gênero.\n");
+            errosLog.add("Length Required: Um livro precisa ter, no mínimo, 1 gênero.");
         }
         if(livro.getPaginas() <= 0){
-            errosLog.add("Length Required: Quantidade de páginas precisa ser maior que 0.\n");
+            errosLog.add("Length Required: Quantidade de páginas precisa ser maior que 0.");
         }
         if(livro.getDataPublicacao() == null){
-            errosLog.add("Length Required: É necessário informar a data de publicação do livro\n");
+            errosLog.add("Length Required: É necessário informar a data de publicação do livro");
         }
         if(livro.getQuantidade() <= 0){
-            errosLog.add("Length Required: Quantidade de livros precisa ser maior que 0.\n");
+            errosLog.add("Length Required: Quantidade de livros precisa ser maior que 0.");
         }
         if(livro.getQuantidadeDisponivel() <= 0){
-            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser maior que 0.\n");
+            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser maior que 0.");
         }
         if(livro.getQuantidadeDisponivel() > livro.getQuantidade()){
-            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser menor que a quantidade total de livros.\n");
+            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser menor que a quantidade total de livros.");
         }
 
         if(!errosLog.isEmpty()){
@@ -138,7 +138,7 @@ public class LivroService {
         Optional<Livro> livroByTitulo = findByTitulo(livro.getTitulo());
 
         if(livroByTitulo.isPresent() && livroByTitulo.get().getId() != livro.getId()){
-            errosLog.add("Conflict: Book Title is already in use.\n");
+            errosLog.add("Conflict: Book Title is already in use.");
         }
 
         Optional<Livro> livroOptional = findById(livro.getId());
@@ -147,34 +147,34 @@ public class LivroService {
         }
 
         if(livro.getTitulo().length() > 255){
-            errosLog.add("Length Required: Book Title must have less than 255 characters.\n");
+            errosLog.add("Length Required: Book Title must have less than 255 characters.");
         }
         if(livro.getAutor().length() > 255){
-            errosLog.add("Length Required: Author's Name must have less than 255 characters.\n");
+            errosLog.add("Length Required: Author's Name must have less than 255 characters.");
         }
         if(livro.getQuantidade() > 1000){
-            errosLog.add("Length Required: Quantity of books must be less than 1000 characters.\n");
+            errosLog.add("Length Required: Quantity of books must be less than 1000 characters.");
         }
         if(livro.getGeneros() != null && livro.getGeneros().size() > 3){
-            errosLog.add("Length Required: Um livro precisa ter, no máximo, 3 gêneros.\n");
+            errosLog.add("Length Required: Um livro precisa ter, no máximo, 3 gêneros.");
         }
         if (livro.getGeneros() == null || livro.getGeneros().isEmpty()) {
-            errosLog.add("Length Required: Um livro precisa ter, no mínimo, 1 gênero.\n");
+            errosLog.add("Length Required: Um livro precisa ter, no mínimo, 1 gênero.");
         }
         if(livro.getPaginas() <= 0){
-            errosLog.add("Length Required: Quantidade de páginas precisa ser maior que 0.\n");
+            errosLog.add("Length Required: Quantidade de páginas precisa ser maior que 0.");
         }
         if(livro.getDataPublicacao() == null){
-            errosLog.add("Length Required: É necessário informar a data de publicação do livro\n");
+            errosLog.add("Length Required: É necessário informar a data de publicação do livro");
         }
         if(livro.getQuantidade() <= 0){
-            errosLog.add("Length Required: Quantidade de livros precisa ser maior que 0.\n");
+            errosLog.add("Length Required: Quantidade de livros precisa ser maior que 0.");
         }
         if(livro.getQuantidadeDisponivel() <= 0){
-            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser maior que 0.\n");
+            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser maior que 0.");
         }
         if(livro.getQuantidadeDisponivel() > livro.getQuantidade()){
-            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser menor que a quantidade total de livros.\n");
+            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser menor que a quantidade total de livros.");
         }
 
         if(!errosLog.isEmpty()){

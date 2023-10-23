@@ -24,4 +24,19 @@
   margin: 10px 0;
 }
 
+.logout-button {
+  background-color: rgba(25, 118, 210, 0.8); /* Fundo branco ligeiramente transparente */
+  border: none;
+  border-radius: 5px; /* Bordas arredondadas */
+  color: #fff; /* Fonte branca */
+  padding: 10px 20px; /* Espaçamento interno para o botão */
+  cursor: pointer;
+  outline: none; /* Remove a borda de foco padrão */
+  transition: background-color 0.2s; /* Efeito de transição de cor de fundo */
+  margin-top: 100px;
+  margin-right: 20px
+}
 
+.logout-button:hover {
+  background-color: rgba(255, 255, 255, 0.8); /* Cor de fundo transparente ao passar o mouse */
+}
