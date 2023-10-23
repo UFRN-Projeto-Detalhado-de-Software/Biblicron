@@ -6,6 +6,7 @@ import {CrudService} from "../../services/CrudService";
 import {NavigationExtras, Router} from "@angular/router";
 import {Path} from "../../utilities/Path";
 import {User} from "../../models/User";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-pagina-login',
@@ -22,6 +23,7 @@ export class PaginaLoginComponent implements OnInit{
     private userService: CrudService<User>,
     private router: Router,
     private fb: FormBuilder,
+    private messageService: MessageService,
   ) {
     this.user = new User();
     this.userForm = this.fb.group({
@@ -81,7 +83,18 @@ export class PaginaLoginComponent implements OnInit{
       const successMessage: string = 'Login realizado com sucesso!';
       localStorage.setItem('currentUser', JSON.stringify(data));
       this.redirectWithSuccessMessage('pagina-inicial', successMessage);
-    });
+    },
+      error => {
+        let errorMessage: string;
+
+        if (error.error) {
+          errorMessage = JSON.stringify(error.error);
+        } else {
+          errorMessage = "Não foi possível realizar o login!";
+        }
+
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: errorMessage });
+      });
   }
 
 

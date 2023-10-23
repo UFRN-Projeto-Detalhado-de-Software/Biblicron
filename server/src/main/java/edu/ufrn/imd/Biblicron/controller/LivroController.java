@@ -70,6 +70,7 @@ public class LivroController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(livroService.generateSugestoesById(id));
     }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> deleteLivro(@PathVariable(value = "id") Long id){
         Optional<Livro> livroOptional = livroService.findById(id);

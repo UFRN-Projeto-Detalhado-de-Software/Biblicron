@@ -157,7 +157,7 @@ public class UserService {
         }
 
         if(!userOptional.isPresent()){
-            errosLog.add("Not Found: User credentials not found.");
+            errosLog.add("Not Found: Não foi possível encontrar um usuário com essas credenciais.");
         }
 
         if(!errosLog.isEmpty()){

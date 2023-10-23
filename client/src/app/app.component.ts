@@ -19,6 +19,7 @@ export class AppComponent implements OnInit{
       // Se o usuário estiver logado, redirecione para a página principal (ou outra página)
       this.router.navigate(['/pagina-inicial']);
     }
+
     window.onbeforeunload = function() {
       localStorage.removeItem('currentUser');
       return '';

@@ -71,7 +71,7 @@ export class PaginaUsuariosComponent implements OnInit{
           this.loadTable();
         },
           error => {
-            this.loadTable()
+            this.loadTable();
           },
 
           () => {

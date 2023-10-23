@@ -7,6 +7,7 @@ import {HttpClient} from "@angular/common/http";
 import {User, UserType} from "../../models/User";
 import {Path} from "../../utilities/Path";
 import {Emprestimo} from "../../models/Emprestimo";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-pagina-emprestimos-cadastro',
@@ -22,6 +23,7 @@ export class PaginaEmprestimosCadastroComponent implements OnInit{
 
   constructor(
     private emprestimoService: CrudService<Emprestimo>,
+    private messageService: MessageService,
     private router: Router,
     private fb: FormBuilder,
   ) {
@@ -80,9 +82,20 @@ export class PaginaEmprestimosCadastroComponent implements OnInit{
 
   create(emprestimo: Emprestimo) {
     this.emprestimoService.create(Path.LOCALHOST + '/emprestimo/realizar', emprestimo).subscribe((data: any) => {
-      const successMessage: string = this.emprestimoForm.value.id ? 'Empréstimo atualizado com sucesso!' : 'Empréstimo cadastrado com sucesso!';
-      this.redirectWithSuccessMessage('pagina-emprestimos', successMessage);
-    });
+      const sucessMessage: string = 'Empréstimo de id: ' + emprestimo.id + ' cadastrado com sucesso!';
+      this.redirectWithSuccessMessage('pagina-usuarios', sucessMessage);
+    },
+      error => {
+        let errorMessage: string;
+
+        if (error.error) {
+          errorMessage = JSON.stringify(error.error); // Converte o objeto de resposta em uma string
+        } else {
+          errorMessage = "Não foi possível cadastrar o usuário!";
+        }
+
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: errorMessage });
+      });
   }
 
 

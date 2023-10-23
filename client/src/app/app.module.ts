@@ -22,7 +22,6 @@ import {ConfirmPopupModule} from "primeng/confirmpopup";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ToastModule} from "primeng/toast";
 import { PaginaLoginComponent } from './pages/pagina-login/pagina-login.component';
-import {CleanupService} from "./services/CleanupService";
 
 @NgModule({
   declarations: [
@@ -50,7 +49,7 @@ import {CleanupService} from "./services/CleanupService";
     BrowserAnimationsModule,
     ToastModule
   ],
-  providers: [ConfirmationService, MessageService, CleanupService],
+  providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
