@@ -1,0 +1,39 @@
+<body>
+<div class="container">
+  <div class="card mb-5 mb-xl-10">
+    <div class="card-header border-0">
+      <div class="card-title m-0">
+        <h3 class="fw-bolder m-0">Login</h3>
+      </div>
+    </div>
+    <div id="kt_account_profile_details" class="collapse show">
+      <form class="form" [formGroup]="userForm" novalidate="novalidate">
+        <div class="card-body border-top p-9">
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Nome de Usuário
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="username" type="text" id="username" placeholder="Informe seu nome de usuário">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Senha
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="password" type="password" id="password" placeholder="Informe sua senha">
+            </div>
+          </div>
+        </div>
+        <div class="card-footer d-flex justify-content-end py-6 px-9">
+          <button title="Botão para fazer login" type="button" class="btn btn-primary button"
+                  (click)="submit()">
+            <ng-container >Login</ng-container>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>

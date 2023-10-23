@@ -1,6 +1,7 @@
 package edu.ufrn.imd.Biblicron.controller;
 
 import edu.ufrn.imd.Biblicron.dto.UserDto;
+import edu.ufrn.imd.Biblicron.model.Livro;
 import edu.ufrn.imd.Biblicron.model.User;
 import edu.ufrn.imd.Biblicron.service.UserService;
 import org.apache.commons.beanutils.BeanUtils;
@@ -62,29 +63,47 @@ public class UserController {
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "id")Long id){
         Optional<User> userOptional = userService.findById(id);
         if(!userOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
         }
-        userService.delete(userOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("User of id " + id + " deleted successfully.");
+        try{
+            userService.delete(userOptional.get());
+            return ResponseEntity.status(HttpStatus.OK).body("Book of id " + id + " deleted successfully.");
+        } catch (IllegalStateException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Object> updateUser(@PathVariable(value = "id")Long id,
                                              @RequestBody @Valid UserDto userDto){
 
-        Optional<User> userOptional = userService.findById(id);
-        if(!userOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found: User not found.");
-        }
-
-        var user = userOptional.get();
+        var user = new User();
         try {
             BeanUtils.copyProperties(user, userDto);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
-        user.setId(userOptional.get().getId());
+        user.setId(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body(userService.save(user));
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(userService.update(user));
+        }
+        catch (IllegalStateException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody @Valid UserDto userDto){
+
+        var userName = userDto.getUsername();
+        var password = userDto.getPassword();
+
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(userService.login(userName, password));
+        }
+        catch (IllegalStateException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
 }

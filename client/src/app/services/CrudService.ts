@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {User} from "../models/User";
 
 @Injectable({
   providedIn: 'root',
@@ -35,5 +36,8 @@ export class CrudService<T> {
 
   return(endpoint: string, id: number): Observable<T> {
     return this.http.post<T>(`${endpoint}/${id}`, null);
+  }
+  login(endpoint: string, entity: T): Observable<T> {
+    return this.http.post<T>(endpoint, entity);
   }
 }

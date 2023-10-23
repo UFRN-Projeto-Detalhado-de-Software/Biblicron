@@ -1,23 +1,29 @@
 package edu.ufrn.imd.Biblicron.service;
 
+import edu.ufrn.imd.Biblicron.model.Emprestimo;
 import edu.ufrn.imd.Biblicron.model.User;
+import edu.ufrn.imd.Biblicron.repository.IEmprestimoRepository;
 import edu.ufrn.imd.Biblicron.repository.IUserRepository;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
 
     final IUserRepository userRepository;
+    final IEmprestimoRepository emprestimoRepository;
 
-    public UserService(IUserRepository userRepository) {
+    public UserService(IUserRepository userRepository, IEmprestimoRepository emprestimoRepository) {
         this.userRepository = userRepository;
+        this.emprestimoRepository = emprestimoRepository;
     }
 
 
@@ -70,8 +76,93 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
     public void delete(User user) {
+        Optional<Emprestimo> currentLoan = emprestimoRepository.findByUsuarioAndReturnDateIsNull(user);
+        List<Emprestimo> loanRecords = emprestimoRepository.findByUsuario(user);
+        if(currentLoan.isPresent()){
+            throw new IllegalStateException("Conflict: User " + user.getUsername() + " tem um empréstimo em andamento");
+        }
+        if(!loanRecords.isEmpty()){
+            throw new IllegalStateException("Conflict: User " + user.getUsername() + " está nos registros de empréstimo e não pode ser apagado");
+        }
         userRepository.delete(user);
+    }
+
+    @Transactional
+    public User update(User user){
+        ArrayList<String> errosLog = new ArrayList<>();
+
+        Optional<User> userByUsername = findByUsername(user.getUsername());
+        if(userByUsername.isPresent() && userByUsername.get().getId() != user.getId() ){
+            errosLog.add("Conflict: Username is already in use.\n");
+        }
+
+        Optional<User> userByEmail = findByEmail(user.getEmail());
+        if(userByEmail.isPresent() && userByEmail.get().getId() != user.getId()){
+            errosLog.add("Conflict: Email is already in user.\n");
+        }
+
+        Optional<User> userOptional = findById(user.getId());
+        if(!userOptional.isPresent()){
+            errosLog.add("Not found: User not found");
+        }
+
+        if(user.getUsername().length() > 50){
+            errosLog.add("Length Required: Username must have less than 50 characters.\n");
+        }
+        if(user.getPassword().length() > 50){
+            errosLog.add("Length Required: Password must have less than 50 characters.\n");
+        }
+        if(user.getEmail().length() > 50){
+            errosLog.add("Length Required: Email must have less than 50 characters.\n");
+        }
+        if (user.getUserType() == null) {
+            errosLog.add("Length Required: O campo 'userType' não pode ser nulo.\n");
+        }
+
+        if(!errosLog.isEmpty()){
+            throw new IllegalStateException(String.valueOf(errosLog));
+        }
+        return userRepository.save(user);
+    }
+
+    public User login(String userName, String password) {
+        ArrayList<String> errosLog = new ArrayList<>();
+        if(userName == null){
+            errosLog.add("Empty: Necessário Informar o campo de UserName.\n");
+        }
+        if(password == null){
+            errosLog.add("Empty: Necessário Informar o campo de Password.\n");
+        }
+        if(userName.length() > 50){
+            errosLog.add("Length Required: Username must have less than 50 characters.\n");
+        }
+        if(password.length() > 50){
+            errosLog.add("Length Required: Password must have less than 50 characters.\n");
+        }
+
+        Optional<User> userOptional = userRepository.findByUsernameAndPassword(userName, password);
+        var user = new User();
+        if(userOptional.isPresent()) {
+            try {
+                BeanUtils.copyProperties(user, userOptional.get());
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+            user.setId(userOptional.get().getId());
+        }
+
+        if(!userOptional.isPresent()){
+            errosLog.add("Not Found: User credentials not found.\n");
+        }
+
+        if(!errosLog.isEmpty()){
+            throw new IllegalStateException(String.valueOf(errosLog));
+        }
+        return user;
     }
 }

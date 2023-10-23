@@ -95,7 +95,6 @@ public class LivroController {
             throw new RuntimeException(e);
         }
         livro.setId(id);
-        System.out.println(livro.getQuantidadeDisponivel());
 
         // Configure os gêneros do livro
         livro.setGeneros(livroDto.getGeneros());

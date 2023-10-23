@@ -63,6 +63,9 @@ public class LivroService {
         if(livro.getQuantidadeDisponivel() <= 0){
             errosLog.add("Length Required: Quantidade Disponível de livros precisa ser maior que 0.\n");
         }
+        if(livro.getQuantidadeDisponivel() > livro.getQuantidade()){
+            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser menor que a quantidade total de livros.\n");
+        }
 
         if(!errosLog.isEmpty()){
             throw new IllegalStateException(String.valueOf(errosLog));
@@ -169,6 +172,9 @@ public class LivroService {
         }
         if(livro.getQuantidadeDisponivel() <= 0){
             errosLog.add("Length Required: Quantidade Disponível de livros precisa ser maior que 0.\n");
+        }
+        if(livro.getQuantidadeDisponivel() > livro.getQuantidade()){
+            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser menor que a quantidade total de livros.\n");
         }
 
         if(!errosLog.isEmpty()){

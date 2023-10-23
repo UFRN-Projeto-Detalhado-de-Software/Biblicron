@@ -15,9 +15,10 @@ import java.util.Optional;
 @Repository
 public interface IEmprestimoRepository extends JpaRepository<Emprestimo, Long> {
     Optional<Emprestimo> findByUsuarioAndReturnDateIsNull(User usuario);
-
+    List<Emprestimo> findByUsuario(User usuario);
     List<Emprestimo> findByLivroAndReturnDateIsNull(Livro livro);
     List<Emprestimo> findByLivro(Livro livro);
+
     @Query("SELECT e FROM Emprestimo e WHERE e.maxReturnDate >= :dataLimite AND e.maxReturnDate <= :dataLimitePlusOneDay")
     List<Emprestimo> findByMaxReturnDateWithin24Hours(@Param("dataLimite") LocalDate dataLimite, @Param("dataLimitePlusOneDay") LocalDate dataLimitePlusOneDay);
 

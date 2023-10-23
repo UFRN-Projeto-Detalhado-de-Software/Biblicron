@@ -9,6 +9,7 @@ import {
   PaginaEmprestimosCadastroComponent
 } from "./pages/pagina-emprestimos-cadastro/pagina-emprestimos-cadastro.component";
 import {PaginaUsuariosCadastroComponent} from "./pages/pagina-usuarios-cadastro/pagina-usuarios-cadastro.component";
+import {PaginaLoginComponent} from "./pages/pagina-login/pagina-login.component";
 
 const routes: Routes = [
   { path: 'pagina-inicial', component: PaginaInicialComponent },
@@ -19,7 +20,8 @@ const routes: Routes = [
   { path: 'pagina-livros-cadastro/:id', component: PaginaLivrosCadastroComponent },
   { path: 'pagina-emprestimos-cadastro', component: PaginaEmprestimosCadastroComponent },
   { path: 'pagina-usuarios-cadastro', component: PaginaUsuariosCadastroComponent },
-  { path: '**', redirectTo: 'pagina-inicial' },
+  { path: 'pagina-login', component: PaginaLoginComponent },
+  { path: '**', redirectTo: 'pagina-login' },
 ];
 
 
