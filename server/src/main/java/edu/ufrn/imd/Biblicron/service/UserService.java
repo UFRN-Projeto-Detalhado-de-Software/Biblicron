@@ -1,6 +1,8 @@
 package edu.ufrn.imd.Biblicron.service;
 
 import edu.ufrn.imd.Biblicron.model.Emprestimo;
+import edu.ufrn.imd.Biblicron.model.Enum.Genero;
+import edu.ufrn.imd.Biblicron.model.Livro;
 import edu.ufrn.imd.Biblicron.model.User;
 import edu.ufrn.imd.Biblicron.repository.IEmprestimoRepository;
 import edu.ufrn.imd.Biblicron.repository.IUserRepository;
@@ -12,8 +14,10 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -164,5 +168,49 @@ public class UserService {
             throw new IllegalStateException(String.valueOf(errosLog));
         }
         return user;
+    }
+
+    public List<Livro> generateSugestoesById(Long id){
+        var usuario = userRepository.findById(id).get();
+
+        var emprestimos = emprestimoRepository.findEmprestimosByUsuario(id);
+
+        var livrosPercorridos = new HashMap<Livro, Boolean>();
+
+
+        var generos = new HashMap<Genero, Integer>();
+
+        for (Emprestimo emprestimo : emprestimos) {
+            var livro = emprestimo.getLivro();
+            if (livrosPercorridos.containsKey(usuario)) {
+                continue;
+            }
+            livrosPercorridos.put(livro, true);
+            var livroGeneros = livro.getGeneros();
+
+            for(var genero : livroGeneros) {
+                generos.put(genero, generos.getOrDefault(genero, 0) + 1);
+            }
+        }
+
+        var generoMaisEmprestado = generos.entrySet().stream().sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue())).collect(Collectors.toList()).get(0).getKey();
+
+        var emprestimosDoGeneroMaisEmprestado = emprestimoRepository.findEmprestimosByLivroGenero(generoMaisEmprestado);
+
+        var livrosRecomendados = new HashMap<Livro, Integer>();
+
+        for (var emprestimo : emprestimosDoGeneroMaisEmprestado) {
+            var livroRecomendado = emprestimo.getLivro();
+            livrosRecomendados.put(livroRecomendado, livrosRecomendados.getOrDefault(livroRecomendado, 0) + 1);
+        }
+
+        var sortedSugestions = livrosRecomendados.entrySet()
+                .stream()
+                .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+                .collect(Collectors.toList());
+
+        return sortedSugestions.stream()
+                .map(sugestao -> sugestao.getKey())
+                .collect(Collectors.toList());
     }
 }

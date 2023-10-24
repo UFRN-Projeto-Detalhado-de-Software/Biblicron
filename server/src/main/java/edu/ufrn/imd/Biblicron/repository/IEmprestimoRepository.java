@@ -1,6 +1,7 @@
 package edu.ufrn.imd.Biblicron.repository;
 
 import edu.ufrn.imd.Biblicron.model.Emprestimo;
+import edu.ufrn.imd.Biblicron.model.Enum.Genero;
 import edu.ufrn.imd.Biblicron.model.Livro;
 import edu.ufrn.imd.Biblicron.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,5 +28,9 @@ public interface IEmprestimoRepository extends JpaRepository<Emprestimo, Long> {
 
     @Query("SELECT e FROM Emprestimo e WHERE e.livro.id = :id")
     List<Emprestimo> findEmprestimosByLivro(@Param("id") Long id);
+
+    @Query("SELECT e FROM Emprestimo e WHERE e.livro IN (SELECT l FROM Livro l WHERE :genero MEMBER OF l.generos)")
+    List<Emprestimo> findEmprestimosByLivroGenero(@Param("genero") Genero genero);
+
 
 }
