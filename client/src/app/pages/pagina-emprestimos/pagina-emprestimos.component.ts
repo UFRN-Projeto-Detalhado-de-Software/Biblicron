@@ -131,7 +131,7 @@ export class PaginaEmprestimosComponent implements OnInit{
         );
       },
       reject: () => {
-        console.log("Não foi possível remover o feriado de id: " + item.id);
+        console.log("Não foi possível devolver o empréstimo de id: " + item.id);
       }
     });
   }

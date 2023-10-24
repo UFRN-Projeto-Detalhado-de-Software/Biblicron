@@ -8,7 +8,6 @@
 
 <div class="title-separator"></div>
 
-<!-- Página Inicial -->
 <div class="menu-item">
   <a class="menu-link without-sub"
      routerLink="/pagina-inicial"
@@ -27,7 +26,6 @@
 
 <div class="separator"></div>
 
-<!-- Espaço do Servidor -->
 <div class="menu-item">
   <a class="menu-link without-sub"
      routerLink="/pagina-livros"
@@ -45,7 +43,6 @@
 
 <div class="separator"></div>
 
-<!-- Página Setores Internos -->
 <div class="menu-item">
   <a class="menu-link without-sub"
      routerLink="/pagina-emprestimos"
@@ -63,7 +60,6 @@
 
 <div class="separator"></div>
 
-<!-- Página Setores Internos -->
 <div class="menu-item">
   <a class="menu-link without-sub"
      routerLink="/pagina-usuarios"
@@ -79,6 +75,39 @@
     </span>
   </a>
 </div>
+
+<div class="menu-item" style="margin-top: 10px">
+  <a class="menu-link without-sub"
+     routerLink="/pagina-estipular-paginas"
+     title="Link de acesso à página de estipulação de prazo por páginas"
+  >
+    <span class="menu-icon">
+      <span
+        class="svg-icon svg-icon-2">
+      </span>
+    </span>
+    <span class="menu-title">
+      Estipular Prazo por Páginas
+    </span>
+  </a>
+</div>
+
+<div class="menu-item" style="margin-top: 10px">
+  <a class="menu-link without-sub"
+     routerLink="/pagina-estipular-dias"
+     title="Link de acesso à página de estipulação de prazo por dias"
+  >
+    <span class="menu-icon">
+      <span
+        class="svg-icon svg-icon-2">
+      </span>
+    </span>
+    <span class="menu-title">
+      Estipular Prazo por Dias
+    </span>
+  </a>
+</div>
+
   <div class="menu-item logout">
     <button class="logout-button" (click)="logout()">Log Out</button>
   </div>

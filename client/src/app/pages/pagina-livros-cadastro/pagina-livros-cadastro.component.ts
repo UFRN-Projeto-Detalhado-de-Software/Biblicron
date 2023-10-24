@@ -138,7 +138,7 @@ export class PaginaLivrosCadastroComponent implements OnInit{
         if (error.error) {
           errorMessage = JSON.stringify(error.error); // Converte o objeto de resposta em uma string
         } else {
-          errorMessage = "Não foi possível cadastrar o usuário!";
+          errorMessage = "Não foi possível cadastrar o livro!";
         }
 
         this.messageService.add({ severity: 'error', summary: 'Erro', detail: errorMessage });
@@ -150,8 +150,8 @@ export class PaginaLivrosCadastroComponent implements OnInit{
 
   updateLivro(livro: Livro) {
     this.livroService.update(Path.LOCALHOST + '/livro/update', livro.id, livro).subscribe((data: any) => {
-      const sucessMessage: string = 'User ' + livro.titulo + ' editado com sucesso!';
-      this.redirectWithSuccessMessage('pagina-usuarios', sucessMessage);
+      const sucessMessage: string = 'Livro ' + livro.titulo + ' editado com sucesso!';
+      this.redirectWithSuccessMessage('pagina-livros', sucessMessage);
     },
       error => {
         let errorMessage: string;
@@ -159,7 +159,7 @@ export class PaginaLivrosCadastroComponent implements OnInit{
         if (error.error) {
           errorMessage = JSON.stringify(error.error); // Converte o objeto de resposta em uma string
         } else {
-          errorMessage = "Não foi possível cadastrar o usuário!";
+          errorMessage = "Não foi possível atualizar o livro!";
         }
 
         this.messageService.add({ severity: 'error', summary: 'Erro', detail: errorMessage });

@@ -1,0 +1,56 @@
+.container {
+  display: flex;
+  margin-left: 170px;
+  height: 100vh;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif, Arial;
+}
+
+/* Estilos para o formulário */
+/* Estilos para o formulário */
+.form {
+  margin: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 500px;
+}
+
+/* Estilos para os campos de entrada (input) e seleção (select) */
+input[type="text"],
+input[type="number"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 10px; /* Ajuste o padding conforme necessário */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  height: 40px; /* Ajuste a altura conforme necessário */
+  box-sizing: border-box; /* Inclui padding e borda no dimensionamento do elemento */
+}
+
+/* Aumente a altura do formulário para acomodar os campos */
+.row {
+  margin-bottom: 20px;
+  height: auto;
+}
+
+
+select[multiple] {
+  height: auto;
+}
+
+button {
+  background-color: #357808;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+button:hover{
+  background-color: #1976d2;
+}

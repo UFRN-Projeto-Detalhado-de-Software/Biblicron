@@ -10,6 +10,8 @@ import {
 } from "./pages/pagina-emprestimos-cadastro/pagina-emprestimos-cadastro.component";
 import {PaginaUsuariosCadastroComponent} from "./pages/pagina-usuarios-cadastro/pagina-usuarios-cadastro.component";
 import {PaginaLoginComponent} from "./pages/pagina-login/pagina-login.component";
+import {PaginaEstipularPaginasComponent} from "./pages/pagina-estipular-paginas/pagina-estipular-paginas.component";
+import {PaginaEstipularDiasComponent} from "./pages/pagina-estipular-dias/pagina-estipular-dias.component";
 
 const routes: Routes = [
   { path: 'pagina-inicial', component: PaginaInicialComponent },
@@ -21,6 +23,8 @@ const routes: Routes = [
   { path: 'pagina-emprestimos-cadastro', component: PaginaEmprestimosCadastroComponent },
   { path: 'pagina-usuarios-cadastro', component: PaginaUsuariosCadastroComponent },
   { path: 'pagina-login', component: PaginaLoginComponent },
+  { path: 'pagina-estipular-paginas', component: PaginaEstipularPaginasComponent },
+  { path: 'pagina-estipular-dias', component: PaginaEstipularDiasComponent },
   { path: '**', redirectTo: 'pagina-login' },
 ];
 
