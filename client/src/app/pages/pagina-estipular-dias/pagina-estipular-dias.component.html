@@ -1,0 +1,40 @@
+<body>
+<div class="container">
+  <div class="card mb-5 mb-xl-10">
+    <div class="card-header border-0">
+      <div class="card-title m-0">
+        <h3 class="fw-bolder m-0">Estipular prazo pela quantidade de dias</h3>
+      </div>
+    </div>
+    <div id="kt_account_profile_details" class="collapse show">
+      <form class="form" [formGroup]="estipularForm" novalidate="novalidate">
+        <div class="card-body border-top p-9" >
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Nome do Livro
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="nomeLivro" type="text" id="nomeLivro" placeholder="Informe o nome do livro">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Quantidade de Dias
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="parametro" type="number" id="parametro" placeholder="Informe a quantidade de dias" required min="1">
+            </div>
+          </div>
+        </div>
+        <div class="card-footer d-flex justify-content-end py-6 px-9">
+          <button title="Botão para submeter formulário" type="button" class="btn btn-primary"
+                  (click)="submit()">
+            <ng-container >Estipular</ng-container>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+<p-toast [life]="7000"></p-toast>

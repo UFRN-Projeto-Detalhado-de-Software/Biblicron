@@ -82,8 +82,8 @@ export class PaginaEmprestimosCadastroComponent implements OnInit{
 
   create(emprestimo: Emprestimo) {
     this.emprestimoService.create(Path.LOCALHOST + '/emprestimo/realizar', emprestimo).subscribe((data: any) => {
-      const sucessMessage: string = 'Empréstimo de id: ' + emprestimo.id + ' cadastrado com sucesso!';
-      this.redirectWithSuccessMessage('pagina-usuarios', sucessMessage);
+      const sucessMessage: string = 'Empréstimo de id: ' + data.id + ' cadastrado com sucesso!';
+      this.redirectWithSuccessMessage('pagina-emprestimos', sucessMessage);
     },
       error => {
         let errorMessage: string;
@@ -91,7 +91,7 @@ export class PaginaEmprestimosCadastroComponent implements OnInit{
         if (error.error) {
           errorMessage = JSON.stringify(error.error); // Converte o objeto de resposta em uma string
         } else {
-          errorMessage = "Não foi possível cadastrar o usuário!";
+          errorMessage = "Não foi possível cadastrar o empréstimo!";
         }
 
         this.messageService.add({ severity: 'error', summary: 'Erro', detail: errorMessage });

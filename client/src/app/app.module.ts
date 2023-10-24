@@ -22,6 +22,8 @@ import {ConfirmPopupModule} from "primeng/confirmpopup";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ToastModule} from "primeng/toast";
 import { PaginaLoginComponent } from './pages/pagina-login/pagina-login.component';
+import { PaginaEstipularPaginasComponent } from './pages/pagina-estipular-paginas/pagina-estipular-paginas.component';
+import { PaginaEstipularDiasComponent } from './pages/pagina-estipular-dias/pagina-estipular-dias.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import { PaginaLoginComponent } from './pages/pagina-login/pagina-login.componen
     PaginaEmprestimosCadastroComponent,
     PaginaUsuariosCadastroComponent,
     PaginaLoginComponent,
+    PaginaEstipularPaginasComponent,
+    PaginaEstipularDiasComponent,
   ],
   imports: [
     BrowserModule,
