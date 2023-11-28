@@ -6,14 +6,11 @@ import edu.ufrn.imd.Biblicron.model.User;
 import edu.ufrn.imd.Biblicron.repository.IEmprestimoRepository;
 import edu.ufrn.imd.Biblicron.repository.ILivroRepository;
 import edu.ufrn.imd.Biblicron.repository.IUserRepository;
-import lombok.SneakyThrows;
+import edu.ufrn.imd.Biblicron.strategies.interfaces.IDevolucaoStrategy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,14 +19,16 @@ import java.util.Optional;
 
 @Service
 public class EmprestimoService {
-    final IEmprestimoRepository emprestimoRepository;
-    final ILivroRepository livroRepository;
-    final IUserRepository userRepository;
+    private final IEmprestimoRepository emprestimoRepository;
+    private final ILivroRepository livroRepository;
+    private final IUserRepository userRepository;
+    private final IDevolucaoStrategy devolucaoStrategy;
 
-    public EmprestimoService(IEmprestimoRepository emprestimoRepository, ILivroRepository livroRepository, IUserRepository userRepository) {
+    public EmprestimoService(IEmprestimoRepository emprestimoRepository, ILivroRepository livroRepository, IUserRepository userRepository, IDevolucaoStrategy devolucaoStrategy) {
         this.emprestimoRepository = emprestimoRepository;
         this.livroRepository = livroRepository;
         this.userRepository = userRepository;
+        this.devolucaoStrategy = devolucaoStrategy;
     }
 
     @Transactional
@@ -105,7 +104,7 @@ public class EmprestimoService {
 
         if (emprestimoOptional.isPresent()) {
             Emprestimo emprestimo = emprestimoOptional.get();
-            if (emprestimo.getReturnDate() == null) {
+            if (devolucaoStrategy.canBeReturned(emprestimo)) {
                 // Atualize a data de devolução para a data atual
                 emprestimo.setReturnDate(LocalDate.now());
 
@@ -120,6 +119,9 @@ public class EmprestimoService {
 
                 return emprestimoRepository.save(emprestimo);
             }
+            else if(devolucaoStrategy.isLate(emprestimo)){
+                errosLog.add("Conflict: empréstimo atrasado");
+            }
             else{
                 errosLog.add("Conflict: empréstimo já retornado");
             }
@@ -128,7 +130,7 @@ public class EmprestimoService {
             errosLog.add("Not Found: Empréstimo em andamento não encontrado com o ID: " + id);
         }
         if(!errosLog.isEmpty()){
-            throw new IllegalStateException(String.valueOf(errosLog));
+            throw new IllegalStateException(String.join("\n", errosLog));
         }
         return null;
     }

@@ -1,6 +1,8 @@
 package edu.ufrn.imd.Biblicron.dto;
 
 import edu.ufrn.imd.Biblicron.model.Enum.Genero;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -30,6 +32,10 @@ public class LivroDto {
 
     @NotBlank
     private int paginas;
+
+    @Getter
+    @Setter
+    @NotBlank float valor;
 
     @NotNull
     private List<Genero> generos = new ArrayList<>();
