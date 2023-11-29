@@ -6,6 +6,7 @@ import edu.ufrn.imd.Biblicron.model.User;
 import edu.ufrn.imd.Biblicron.repository.IEmprestimoRepository;
 import edu.ufrn.imd.Biblicron.repository.ILivroRepository;
 import edu.ufrn.imd.Biblicron.repository.IUserRepository;
+import edu.ufrn.imd.Biblicron.strategies.interfaces.ICalculoFinalStrategy;
 import edu.ufrn.imd.Biblicron.strategies.interfaces.IDevolucaoStrategy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,12 +24,14 @@ public class EmprestimoService {
     private final ILivroRepository livroRepository;
     private final IUserRepository userRepository;
     private final IDevolucaoStrategy devolucaoStrategy;
+    private final ICalculoFinalStrategy calculoFinalStrategy;
 
-    public EmprestimoService(IEmprestimoRepository emprestimoRepository, ILivroRepository livroRepository, IUserRepository userRepository, IDevolucaoStrategy devolucaoStrategy) {
+    public EmprestimoService(IEmprestimoRepository emprestimoRepository, ILivroRepository livroRepository, IUserRepository userRepository, IDevolucaoStrategy devolucaoStrategy, ICalculoFinalStrategy calculoFinalStrategy) {
         this.emprestimoRepository = emprestimoRepository;
         this.livroRepository = livroRepository;
         this.userRepository = userRepository;
         this.devolucaoStrategy = devolucaoStrategy;
+        this.calculoFinalStrategy = calculoFinalStrategy;
     }
 
     @Transactional
@@ -143,17 +146,17 @@ public class EmprestimoService {
         if (emprestimoOptional.isPresent()) {
             Emprestimo emprestimo = emprestimoOptional.get();
 
-            if(emprestimo.getReturnDate() != null){
+            if(devolucaoStrategy.isReturned(emprestimo)){
                 errosLog.add("Conflict: Devolução já realizada para empréstimo de ID: " + id);
             }
+            else if(devolucaoStrategy.isLate(emprestimo)){
+                errosLog.add("Conflict: Empréstimo atrasado");
+            }
             else{
-                if (LocalDate.now().isBefore(emprestimo.getMaxReturnDate()) || LocalDate.now().isEqual(emprestimo.getMaxReturnDate())){
+                if (devolucaoStrategy.canBeExtended(emprestimo)){
                     // Soma mais 15 dias à Data máxima de devolução
                     emprestimo.setMaxReturnDate(emprestimo.getMaxReturnDate().plusDays(15));
                     return emprestimoRepository.save(emprestimo);
-                }
-                else{
-                    errosLog.add("Conflict: Empréstimo já vencido.");
                 }
             }
         }
@@ -161,9 +164,36 @@ public class EmprestimoService {
             errosLog.add("Not Found: Empréstimo não encontrado com o ID: " + id);
         }
         if(!errosLog.isEmpty()){
-            throw new IllegalStateException(String.valueOf(errosLog));
+            throw new IllegalStateException(String.join("\n", errosLog));
         }
         return null;
+    }
+
+    public float calcularValorFinal(Long id) {
+        ArrayList<String> errosLog = new ArrayList<>();
+        Optional<Emprestimo> emprestimoOptional = emprestimoRepository.findById(id);
+
+        if (emprestimoOptional.isPresent()) {
+            Emprestimo emprestimo = emprestimoOptional.get();
+            if(devolucaoStrategy.isReturned(emprestimo)){
+                if(devolucaoStrategy.wasReturnedLate(emprestimo)){
+                    return calculoFinalStrategy.calculateFinalValueLate(emprestimo);
+                }
+                else{
+                    return calculoFinalStrategy.calculateFinalValueRegular(emprestimo);
+                }
+            }
+            else{
+                errosLog.add("Conflict: Primeiro retorne o empréstimo, para então calcular o valor final");
+            }
+        }
+        else{
+            errosLog.add("Not Found: Empréstimo não encontrado com o ID: " + id);
+        }
+        if(!errosLog.isEmpty()){
+            throw new IllegalStateException(String.join("\n", errosLog));
+        }
+        return 0;
     }
 
     public List<Emprestimo> findEmprestimosComMaxReturnDate(LocalDate dataLimite) {

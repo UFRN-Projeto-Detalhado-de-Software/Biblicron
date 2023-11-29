@@ -14,12 +14,22 @@ public class DevolucaoLivroStrategy implements IDevolucaoStrategy {
     }
 
     @Override
+    public boolean isReturned(Emprestimo emprestimo){
+        return emprestimo.getReturnDate() != null;
+    }
+
+    @Override
     public boolean isLate(Emprestimo emprestimo){
         return emprestimo.getMaxReturnDate().isBefore(LocalDate.now());
     }
 
     @Override
     public boolean canBeExtended(Emprestimo emprestimo) {
-        return false;
+        return LocalDate.now().isBefore(emprestimo.getMaxReturnDate()) || LocalDate.now().isEqual(emprestimo.getMaxReturnDate());
+    }
+
+    @Override
+    public boolean wasReturnedLate(Emprestimo emprestimo){
+        return emprestimo.getReturnDate().isAfter(emprestimo.getMaxReturnDate());
     }
 }

@@ -60,6 +60,19 @@ public class EmprestimoController {
         }
     }
 
+    @PostMapping("/ValorFinal/{id}")
+    public ResponseEntity<Object> valorFinal(@PathVariable Long id){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(emprestimoService.calcularValorFinal(id));
+        }
+        catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        catch (IllegalStateException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
+
     @GetMapping("/listAll")
     public ResponseEntity<Page<Emprestimo>> findAllEmprestimos(@PageableDefault(page = 0, size = 10, sort = "loanDate", direction = Sort.Direction.DESC) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(emprestimoService.findAll(pageable));
