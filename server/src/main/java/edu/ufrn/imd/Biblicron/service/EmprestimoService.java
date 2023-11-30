@@ -169,7 +169,7 @@ public class EmprestimoService {
         return null;
     }
 
-    public float calcularValorFinal(Long id) {
+    public Emprestimo calcularValorFinal(Long id) {
         ArrayList<String> errosLog = new ArrayList<>();
         Optional<Emprestimo> emprestimoOptional = emprestimoRepository.findById(id);
 
@@ -177,10 +177,14 @@ public class EmprestimoService {
             Emprestimo emprestimo = emprestimoOptional.get();
             if(devolucaoStrategy.isReturned(emprestimo)){
                 if(devolucaoStrategy.wasReturnedLate(emprestimo)){
-                    return calculoFinalStrategy.calculateFinalValueLate(emprestimo);
+                   float valorFinal = calculoFinalStrategy.calculateFinalValueLate(emprestimo);
+                   emprestimo.setValorFinal(valorFinal);
+                   return emprestimoRepository.save(emprestimo);
                 }
                 else{
-                    return calculoFinalStrategy.calculateFinalValueRegular(emprestimo);
+                    float valorFinal = calculoFinalStrategy.calculateFinalValueRegular(emprestimo);
+                    emprestimo.setValorFinal(valorFinal);
+                    return emprestimoRepository.save(emprestimo);
                 }
             }
             else{
@@ -193,7 +197,7 @@ public class EmprestimoService {
         if(!errosLog.isEmpty()){
             throw new IllegalStateException(String.join("\n", errosLog));
         }
-        return 0;
+        return null;
     }
 
     public List<Emprestimo> findEmprestimosComMaxReturnDate(LocalDate dataLimite) {

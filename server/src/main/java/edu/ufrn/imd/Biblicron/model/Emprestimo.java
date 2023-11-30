@@ -1,5 +1,9 @@
 package edu.ufrn.imd.Biblicron.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -30,6 +34,11 @@ public class Emprestimo implements Serializable {
 
     @Column(nullable = false, unique = false)
     private LocalDate maxReturnDate; //Esse é o prazo máximo pra devolução, será colocado por padrão ao inserir o empréstimo na database
+
+    @Column(nullable = false, unique = false)
+    @Getter
+    @Setter
+    private float valorFinal;
 
     public Long getId() {
         return id;
