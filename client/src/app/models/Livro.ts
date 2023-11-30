@@ -9,6 +9,7 @@ export class Livro implements Entidade{
   dataPublicacao: Date = new Date();
   paginas: number = 0;
   generos: Genero[] = [];
+  valor: number = 0;
 
 
   constructor(value: Object = {}) {

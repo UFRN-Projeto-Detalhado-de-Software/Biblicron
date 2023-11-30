@@ -36,8 +36,6 @@ public class Emprestimo implements Serializable {
     private LocalDate maxReturnDate; //Esse é o prazo máximo pra devolução, será colocado por padrão ao inserir o empréstimo na database
 
     @Column(nullable = false, unique = false)
-    @Getter
-    @Setter
     private float valorFinal;
 
     public Long getId() {
@@ -86,5 +84,13 @@ public class Emprestimo implements Serializable {
 
     public void setMaxReturnDate(LocalDate maxReturnDate) {
         this.maxReturnDate = maxReturnDate;
+    }
+
+    public float getValorFinal() {
+        return valorFinal;
+    }
+
+    public void setValorFinal(float valorFinal) {
+        this.valorFinal = valorFinal;
     }
 }

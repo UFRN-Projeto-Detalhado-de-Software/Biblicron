@@ -2,6 +2,7 @@ import {Entidade} from "./Entidade";
 
 export class Emprestimo implements Entidade{
   id: number = 0;
+  valorFinal: number = 0;
   nomeLivro: string = '';
   nomeUsuario: string = '';
 

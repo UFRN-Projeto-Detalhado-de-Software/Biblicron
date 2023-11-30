@@ -27,6 +27,7 @@
             <th pSortableColumn="loanDate"> Data de empréstimo</th>
             <th pSortableColumn="maxReturnDate"> Data máxima de retorno</th>
             <th pSortableColumn="returnDate"> Data de retorno </th>
+            <th pSortableColumn="returnDate"> Valor Final </th>
             <th>Ações</th>
           </tr>
         </ng-template>
@@ -37,6 +38,7 @@
             <td>{{ item.loanDate }}</td>
             <td>{{ item.maxReturnDate }}</td>
             <td>{{ item.returnDate }}</td>
+            <td>{{ item.valorFinal.toFixed(2) }}</td>
             <td>
               <button class="pi pi-pencil btn btn-sm btn-icon btn-active-light-primary edit-button"
                       (click)="estenderEmprestimo($event, item)" > Estender
@@ -44,6 +46,10 @@
               <button class="pi pi-trash btn btn-sm btn-icon btn-active-light-primary delete-button"
                       (click)="devolverEmprestimo($event, item)"> Devolver
               </button>
+              <button class="pi pi-trash btn btn-sm btn-icon btn-active-light-primary delete-button"
+                      (click)="calcularValorFinal($event, item)"> Valor Final
+              </button>
+
 
             </td>
           </tr>

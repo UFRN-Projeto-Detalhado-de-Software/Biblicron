@@ -123,7 +123,11 @@ public class EmprestimoService {
                 return emprestimoRepository.save(emprestimo);
             }
             else if(devolucaoStrategy.isLate(emprestimo)){
-                errosLog.add("Conflict: empréstimo atrasado");
+                emprestimo.setReturnDate(LocalDate.now());
+                Livro livro = emprestimo.getLivro();
+                livro.setQuantidadeDisponivel(livro.getQuantidadeDisponivel() + 1);
+                livroRepository.save(livro);
+                return emprestimoRepository.save(emprestimo);
             }
             else{
                 errosLog.add("Conflict: empréstimo já retornado");
@@ -169,22 +173,30 @@ public class EmprestimoService {
         return null;
     }
 
+    @Transactional
     public Emprestimo calcularValorFinal(Long id) {
         ArrayList<String> errosLog = new ArrayList<>();
         Optional<Emprestimo> emprestimoOptional = emprestimoRepository.findById(id);
 
         if (emprestimoOptional.isPresent()) {
             Emprestimo emprestimo = emprestimoOptional.get();
+
             if(devolucaoStrategy.isReturned(emprestimo)){
-                if(devolucaoStrategy.wasReturnedLate(emprestimo)){
-                   float valorFinal = calculoFinalStrategy.calculateFinalValueLate(emprestimo);
-                   emprestimo.setValorFinal(valorFinal);
-                   return emprestimoRepository.save(emprestimo);
+                if(emprestimo.getValorFinal() == 0) {
+                    if (devolucaoStrategy.wasReturnedLate(emprestimo)) {
+                        System.out.println("Atrasado");
+                        float valorFinal = calculoFinalStrategy.calculateFinalValueLate(emprestimo);
+                        emprestimo.setValorFinal(valorFinal);
+                        return emprestimoRepository.save(emprestimo);
+                    }
+                    else {
+                        float valorFinal = calculoFinalStrategy.calculateFinalValueRegular(emprestimo);
+                        emprestimo.setValorFinal(valorFinal);
+                        return emprestimoRepository.save(emprestimo);
+                    }
                 }
                 else{
-                    float valorFinal = calculoFinalStrategy.calculateFinalValueRegular(emprestimo);
-                    emprestimo.setValorFinal(valorFinal);
-                    return emprestimoRepository.save(emprestimo);
+                    errosLog.add("Conflict: Valor final a ser pago já calculado");
                 }
             }
             else{

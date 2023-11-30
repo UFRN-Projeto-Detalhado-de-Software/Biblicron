@@ -55,6 +55,7 @@ export class PaginaLivrosCadastroComponent implements OnInit{
       autor: ['', Validators.required],
       quantidade: ['', Validators.required],
       quantidadeDisponivel: ['', Validators.required],
+      valor: ['', Validators.required],
       dataPublicacao: ['', Validators.required],
       paginas: ['', Validators.required],
       generos: [[]],
@@ -81,7 +82,8 @@ export class PaginaLivrosCadastroComponent implements OnInit{
       quantidadeDisponivel: livro.quantidadeDisponivel,
       dataPublicacao: livro.dataPublicacao,
       paginas: livro.paginas,
-      generos: livro.generos
+      generos: livro.generos,
+      valor: livro.valor
     });
 
   }

@@ -18,7 +18,7 @@ export class PaginaLivrosComponent implements OnInit{
   totalRecords: any = 0;
   page = 0;
   size = 10;
-  order: string = "id";
+  order: string = "titulo";
   direction: string = "DESC";
   constructor(
     private router: Router,

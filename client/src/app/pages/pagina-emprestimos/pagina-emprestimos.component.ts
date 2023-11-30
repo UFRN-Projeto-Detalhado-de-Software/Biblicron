@@ -142,4 +142,40 @@ export class PaginaEmprestimosComponent implements OnInit{
     this.direction = event.sortOrder;
     this.loadTable();
   }
+
+  calcularValorFinal(event: Event, item: Emprestimo) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Tem certeza que calcular o valor final?',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      accept: () => {
+        this.emprestimoService.extend(Path.LOCALHOST + '/emprestimo/ValorFinal', item.id).subscribe(success => {
+            this.loadTable();
+            this.messageService.add({
+              severity: 'success', summary: 'Sucesso', detail: 'Valor final do empréstimo: ' + item.id + ' foi de R$' + item.valorFinal
+            });
+          },
+          error => {
+            let errorMessage: string;
+
+            if (error.error) {
+              errorMessage = JSON.stringify(error.error); // Converte o objeto de resposta em uma string
+            } else {
+              errorMessage = "Não foi possível calcular o valor final";
+            }
+
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: errorMessage });
+          },
+          () => {
+            this.loadTable();
+          }
+        );
+      },
+      reject: () => {
+        console.log("Não foi possível calcular o valor final do empréstimo de id: " + item.id);
+      }
+    });
+  }
 }

@@ -14,8 +14,6 @@ public class CalculoFinalLivroStrategy implements ICalculoFinalStrategy {
     public float calculateFinalValueLate(Emprestimo emprestimo) {
         long regularLoanedDays = ChronoUnit.DAYS.between(emprestimo.getLoanDate(), emprestimo.getMaxReturnDate());
         long amountOfLateDays = ChronoUnit.DAYS.between(emprestimo.getMaxReturnDate(), emprestimo.getReturnDate());
-
-        System.out.println((regularLoanedDays * (emprestimo.getLivro().getValor() * 0.02f)) + (amountOfLateDays * (emprestimo.getLivro().getValor() * 0.04f)));
         return (regularLoanedDays * (emprestimo.getLivro().getValor() * 0.02f)) + (amountOfLateDays * (emprestimo.getLivro().getValor() * 0.04f));
     }
 

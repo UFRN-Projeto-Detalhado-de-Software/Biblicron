@@ -27,6 +27,7 @@
           <th pSortableColumn="titulo"> Título <p-sortIcon field="titulo"></p-sortIcon></th>
           <th pSortableColumn="autor"> Autor <p-sortIcon field="autor"></p-sortIcon></th>
           <th pSortableColumn="quantidadeDisponivel"> Quantidade Disponível <p-sortIcon field="quantidadeDisponivel"></p-sortIcon></th>
+          <th pSortableColumn="valor"> Valor <p-sortIcon field="valor"></p-sortIcon></th>
           <th> Ações </th>
         </tr>
       </ng-template>
@@ -35,6 +36,7 @@
           <td>{{ item.titulo}}</td>
           <td>{{ item.autor }}</td>
           <td>{{ item.quantidadeDisponivel }}</td>
+          <td>{{ item.valor }}</td>
           <td>
             <button class="pi pi-pencil btn btn-sm btn-icon btn-active-light-primary edit-button"
                     (click)="editItem(item)"> Editar

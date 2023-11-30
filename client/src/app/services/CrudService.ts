@@ -41,6 +41,10 @@ export class CrudService<T> {
     return this.http.post<T>(endpoint, entity);
   }
 
+  calculateFinaValue(endpoint: string, id: number): Observable<T>{
+    return this.http.post<T>(`${endpoint}/`, id);
+  }
+
   sugestion(endpoint: string, id: number): Observable<T>{
     return this.http.get<T>(`${endpoint}/${id}`);
   }
