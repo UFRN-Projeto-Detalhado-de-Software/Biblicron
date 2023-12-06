@@ -38,7 +38,7 @@ public class Livro extends Produto implements Serializable {
 
     @Getter
     @Setter
-    @ElementCollection(targetClass = Genero.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = Genero.class)
     @CollectionTable(name = "TB_LIVRO_GENERO", joinColumns = @JoinColumn(name = "livro_id"))
     @Enumerated(EnumType.STRING)
     private List<Genero> generos = new ArrayList<>();

@@ -38,10 +38,10 @@ public class EmailScheduler {
 
         for (Emprestimo emprestimo : emprestimosProximosDoVencimento) {
             String emailUsuario = emprestimo.getUsuario().getEmail();
-            String assunto = "Lembrete de devolução do livro " + emprestimo.getLivro().getTitulo();
+            String assunto = "Lembrete de devolução do livro " + emprestimo.getLivro().getNomeProduto();
             String mensagem = "Prezad@, " + emprestimo.getUsuario().getUsername() + ".\n" +
                     "\n" +
-                    "Gostaríamos de informar que a data limite para devolução do livro " + emprestimo.getLivro().getTitulo() +
+                    "Gostaríamos de informar que a data limite para devolução do livro " + emprestimo.getLivro().getNomeProduto() +
                     " é " + dateFormat.format(Date.from(emprestimo.getMaxReturnDate().atStartOfDay(ZoneId.systemDefault()).toInstant())) + ".\n" +
                     "O número de identificação do seu empréstimo é id: " + emprestimo.getId() + ".\n" +
                     "\n" +

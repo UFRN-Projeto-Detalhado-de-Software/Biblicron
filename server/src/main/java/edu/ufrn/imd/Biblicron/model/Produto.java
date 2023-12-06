@@ -3,20 +3,19 @@ package edu.ufrn.imd.Biblicron.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
-@MappedSuperclass
+
+@Entity
+@Table(name = "TB_PRODUTO")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     @Setter
-    private long Id;
+    private Long id;
 
     @Getter
     @Setter
@@ -33,4 +32,8 @@ public abstract class Produto {
     @Column(nullable = false, unique = false)
     private float valor;
 
+    @Getter
+    @Setter
+    @Column(nullable = false, unique = true, length = 255)
+    private String nomeProduto;
 }

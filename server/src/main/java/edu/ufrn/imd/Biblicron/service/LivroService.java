@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class LivroService {
+public class LivroService extends ProdutoService<Livro>{
 
     final ILivroRepository livroRepository;
     final IEmprestimoRepository emprestimoRepository;
@@ -32,6 +32,8 @@ public class LivroService {
     @Transactional
     public Livro save(Livro livro) {
         ArrayList<String> errosLog = new ArrayList<>();
+
+        errosLog.addAll(validate(livro));
 
         if(existsByTitulo(livro.getTitulo())){
             errosLog.add("Conflict: Book Title is already in use.");
@@ -57,13 +59,6 @@ public class LivroService {
         if(livro.getDataPublicacao() == null){
             errosLog.add("Length Required: É necessário informar a data de publicação do livro");
         }
-        if(livro.getQuantidade() <= 0){
-            errosLog.add("Length Required: Quantidade de livros precisa ser maior que 0.");
-        }
-        if(livro.getQuantidadeDisponivel() > livro.getQuantidade()){
-            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser menor que a quantidade total de livros.");
-        }
-
         if(!errosLog.isEmpty()){
             throw new IllegalStateException(String.valueOf(errosLog));
         }

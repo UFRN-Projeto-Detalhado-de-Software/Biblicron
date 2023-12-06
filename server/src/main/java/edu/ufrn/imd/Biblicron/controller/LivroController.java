@@ -39,6 +39,7 @@ public class LivroController {
         }
 
         livro.setGeneros(livroDto.getGeneros());
+        livro.setNomeProduto(livroDto.getTitulo());
 
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(livroService.save(livro));
