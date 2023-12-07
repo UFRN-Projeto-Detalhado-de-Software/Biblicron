@@ -33,14 +33,8 @@ public class LivroService extends ProdutoService<Livro>{
     public Livro save(Livro livro) {
         ArrayList<String> errosLog = new ArrayList<>();
 
-        errosLog.addAll(validate(livro));
+        errosLog.addAll(validateCreation(livro));
 
-        if(existsByTitulo(livro.getTitulo())){
-            errosLog.add("Conflict: Book Title is already in use.");
-        }
-        if(livro.getTitulo().length() > 255){
-            errosLog.add("Length Required: Book Title must have less than 255 characters.");
-        }
         if(livro.getAutor().length() > 255){
             errosLog.add("Length Required: Author's Name must have less than 255 characters.");
         }
@@ -66,10 +60,6 @@ public class LivroService extends ProdutoService<Livro>{
         livro.setQuantidadeDisponivel(livro.getQuantidade());
         return livroRepository.save(livro);
     }
-
-    public boolean existsByTitulo(String titulo) {
-        return livroRepository.existsByTitulo(titulo);
-    }
     public Page<Livro> findAll(Pageable pageable){
         return livroRepository.findAll(pageable);
     }
@@ -84,8 +74,8 @@ public class LivroService extends ProdutoService<Livro>{
 
     @Transactional
     public void delete(Livro livro) {
-        List<Emprestimo> currentUsage = emprestimoRepository.findByLivroAndReturnDateIsNull(livro);
-        List<Emprestimo> isAtLoanLog = emprestimoRepository.findByLivro(livro);
+        List<Emprestimo> currentUsage = emprestimoRepository.findByProdutoAndReturnDateIsNull(livro);
+        List<Emprestimo> isAtLoanLog = emprestimoRepository.findByProduto(livro);
         if(!(currentUsage.isEmpty())){
             throw new IllegalStateException("Conflict: Livro " + livro.getTitulo() + " está emprestado");
         }
@@ -95,7 +85,7 @@ public class LivroService extends ProdutoService<Livro>{
         livroRepository.delete(livro);
     }
 
-    public List<Livro> generateSugestoesById(Long id){
+    /*public List<Livro> generateSugestoesById(Long id){
         var livro = livroRepository.findById(id).get();
 
         var sugestoes = new HashMap<Livro, Integer>();
@@ -122,7 +112,7 @@ public class LivroService extends ProdutoService<Livro>{
             System.out.println("Pessoas que pegaram este livro também pegaram " + sugestao.getKey().getTitulo() + " num total de " + sugestao.getValue() + " vezes.");
         }
         return sortedSugestions.stream().map(sugestao -> sugestao.getKey()).collect(Collectors.toList());
-    }
+    }*/
 
     @Transactional
     public Livro update(Livro livro) {
@@ -138,15 +128,8 @@ public class LivroService extends ProdutoService<Livro>{
         if(!livroOptional.isPresent()){
             errosLog.add("Not Found: Book not found.");
         }
-
-        if(livro.getTitulo().length() > 255){
-            errosLog.add("Length Required: Book Title must have less than 255 characters.");
-        }
         if(livro.getAutor().length() > 255){
             errosLog.add("Length Required: Author's Name must have less than 255 characters.");
-        }
-        if(livro.getQuantidade() > 1000){
-            errosLog.add("Length Required: Quantity of books must be less than 1000 characters.");
         }
         if(livro.getGeneros() != null && livro.getGeneros().size() > 3){
             errosLog.add("Length Required: Um livro precisa ter, no máximo, 3 gêneros.");
@@ -160,15 +143,8 @@ public class LivroService extends ProdutoService<Livro>{
         if(livro.getDataPublicacao() == null){
             errosLog.add("Length Required: É necessário informar a data de publicação do livro");
         }
-        if(livro.getQuantidade() <= 0){
-            errosLog.add("Length Required: Quantidade de livros precisa ser maior que 0.");
-        }
-        if(livro.getQuantidadeDisponivel() <= 0){
-            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser maior que 0.");
-        }
-        if(livro.getQuantidadeDisponivel() > livro.getQuantidade()){
-            errosLog.add("Length Required: Quantidade Disponível de livros precisa ser menor que a quantidade total de livros.");
-        }
+
+        errosLog.addAll(validateValues(livro));
 
         if(!errosLog.isEmpty()){
             throw new IllegalStateException(String.valueOf(errosLog));

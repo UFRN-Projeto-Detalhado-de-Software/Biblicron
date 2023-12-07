@@ -18,9 +18,11 @@ public class Emprestimo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
+    @Setter
     @ManyToOne
-    @JoinColumn(name = "livro_id", nullable = false)
-    private Livro livro;
+    @JoinColumn(name = "produto_id", nullable = false)
+    private Produto produto;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -44,14 +46,6 @@ public class Emprestimo implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Livro getLivro() {
-        return livro;
-    }
-
-    public void setLivro(Livro livro) {
-        this.livro = livro;
     }
 
     public User getUsuario() {

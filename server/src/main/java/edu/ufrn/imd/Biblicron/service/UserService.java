@@ -170,7 +170,7 @@ public class UserService {
         return user;
     }
 
-    public List<Livro> generateSugestoesById(Long id){
+    /*public List<Livro> generateSugestoesById(Long id){
         var usuario = userRepository.findById(id).get();
 
         var emprestimos = emprestimoRepository.findEmprestimosByUsuario(id);
@@ -212,5 +212,5 @@ public class UserService {
         return sortedSugestions.stream()
                 .map(sugestao -> sugestao.getKey())
                 .collect(Collectors.toList());
-    }
+    }*/
 }

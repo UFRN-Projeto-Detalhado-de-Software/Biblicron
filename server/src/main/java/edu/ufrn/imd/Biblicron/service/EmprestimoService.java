@@ -1,10 +1,12 @@
 package edu.ufrn.imd.Biblicron.service;
 
+import edu.ufrn.imd.Biblicron.factory.interfaces.IStrategyFactory;
 import edu.ufrn.imd.Biblicron.model.Emprestimo;
-import edu.ufrn.imd.Biblicron.model.Livro;
+import edu.ufrn.imd.Biblicron.model.Produto;
 import edu.ufrn.imd.Biblicron.model.User;
 import edu.ufrn.imd.Biblicron.repository.IEmprestimoRepository;
 import edu.ufrn.imd.Biblicron.repository.ILivroRepository;
+import edu.ufrn.imd.Biblicron.repository.IProdutoRepository;
 import edu.ufrn.imd.Biblicron.repository.IUserRepository;
 import edu.ufrn.imd.Biblicron.strategies.interfaces.ICalculoFinalStrategy;
 import edu.ufrn.imd.Biblicron.strategies.interfaces.IDevolucaoStrategy;
@@ -21,17 +23,15 @@ import java.util.Optional;
 @Service
 public class EmprestimoService {
     private final IEmprestimoRepository emprestimoRepository;
-    private final ILivroRepository livroRepository;
+    private final IProdutoRepository produtoRepository;
     private final IUserRepository userRepository;
-    private final IDevolucaoStrategy devolucaoStrategy;
-    private final ICalculoFinalStrategy calculoFinalStrategy;
+    private final IStrategyFactory strategyFactory;
 
-    public EmprestimoService(IEmprestimoRepository emprestimoRepository, ILivroRepository livroRepository, IUserRepository userRepository, IDevolucaoStrategy devolucaoStrategy, ICalculoFinalStrategy calculoFinalStrategy) {
+    public EmprestimoService(IEmprestimoRepository emprestimoRepository, ILivroRepository livroRepository, IProdutoRepository produtoRepository, IUserRepository userRepository, IStrategyFactory strategyFactory) {
         this.emprestimoRepository = emprestimoRepository;
-        this.livroRepository = livroRepository;
+        this.produtoRepository = produtoRepository;
         this.userRepository = userRepository;
-        this.devolucaoStrategy = devolucaoStrategy;
-        this.calculoFinalStrategy = calculoFinalStrategy;
+        this.strategyFactory = strategyFactory;
     }
 
     @Transactional
@@ -48,13 +48,13 @@ public class EmprestimoService {
     }
 
     @Transactional
-    public Emprestimo realizarEmprestimo(String nomeLivro, String nomeUsuario) {
+    public Emprestimo realizarEmprestimo(String nomeProduto, String nomeUsuario) {
 
         ArrayList<String> errosLog = new ArrayList<>();
 
-        Optional<Livro> livro = livroRepository.findByTitulo(nomeLivro);
-        if(livro.isEmpty()){
-            errosLog.add("Not Found: Livro não encontrado com o título: " + nomeLivro);
+        Optional<Produto> produto = produtoRepository.findByNomeProduto(nomeProduto);
+        if(produto.isEmpty()){
+            errosLog.add("Not Found: Livro não encontrado com o título: " + nomeProduto);
         }
 
         Optional<User> usuario = userRepository.findByUsername(nomeUsuario);
@@ -72,19 +72,19 @@ public class EmprestimoService {
             errosLog.add("Conflict: Usuário já possui um empréstimo em andamento.");
         }
 
-        if(livro.isPresent() && emprestimoEmAndamento.isEmpty() && usuario.isPresent()) {
+        if(produto.isPresent() && emprestimoEmAndamento.isEmpty() && usuario.isPresent()) {
             // Verifica se há livros disponíveis no estoque
-            if (livro.get().getQuantidadeDisponivel() > 0) {
+            if (produto.get().getQuantidadeDisponivel() > 0) {
                 Emprestimo emprestimo = new Emprestimo();
-                emprestimo.setLivro(livro.get());
+                emprestimo.setProduto(produto.get());
                 emprestimo.setUsuario(usuario.get());
                 emprestimo.setLoanDate(LocalDate.now());
                 emprestimo.setMaxReturnDate(LocalDate.now().plusDays(15)); //seta data de devolução 15 dias à frente
                 emprestimo.setReturnDate(null);
 
                 // Atualiza a quantidade disponível no estoque
-                livro.get().setQuantidadeDisponivel(livro.get().getQuantidadeDisponivel() - 1);
-                livroRepository.save(livro.get());
+                produto.get().setQuantidadeDisponivel(produto.get().getQuantidadeDisponivel() - 1);
+                produtoRepository.save(produto.get());
 
                 // Salve o empréstimo no banco de dados
                 return emprestimoRepository.save(emprestimo);
@@ -107,26 +107,28 @@ public class EmprestimoService {
 
         if (emprestimoOptional.isPresent()) {
             Emprestimo emprestimo = emprestimoOptional.get();
+            IDevolucaoStrategy devolucaoStrategy = strategyFactory.getDevolucaoStrategy(emprestimo.getProduto());
+
             if (devolucaoStrategy.canBeReturned(emprestimo)) {
                 // Atualize a data de devolução para a data atual
                 emprestimo.setReturnDate(LocalDate.now());
 
                 // Recupere o livro associado ao empréstimo
-                Livro livro = emprestimo.getLivro();
+                Produto produto = emprestimo.getProduto();
 
                 // Incrementar a quantidade disponível no estoque
-                livro.setQuantidadeDisponivel(livro.getQuantidadeDisponivel() + 1);
+                produto.setQuantidadeDisponivel(produto.getQuantidadeDisponivel() + 1);
 
                 // Salve as alterações no banco de dados
-                livroRepository.save(livro);
+                produtoRepository.save(produto);
 
                 return emprestimoRepository.save(emprestimo);
             }
             else if(devolucaoStrategy.isLate(emprestimo)){
                 emprestimo.setReturnDate(LocalDate.now());
-                Livro livro = emprestimo.getLivro();
-                livro.setQuantidadeDisponivel(livro.getQuantidadeDisponivel() + 1);
-                livroRepository.save(livro);
+                Produto produto = emprestimo.getProduto();
+                produto.setQuantidadeDisponivel(produto.getQuantidadeDisponivel() + 1);
+                produtoRepository.save(produto);
                 return emprestimoRepository.save(emprestimo);
             }
             else{
@@ -149,6 +151,7 @@ public class EmprestimoService {
 
         if (emprestimoOptional.isPresent()) {
             Emprestimo emprestimo = emprestimoOptional.get();
+            IDevolucaoStrategy devolucaoStrategy = strategyFactory.getDevolucaoStrategy(emprestimo.getProduto());
 
             if(devolucaoStrategy.isReturned(emprestimo)){
                 errosLog.add("Conflict: Devolução já realizada para empréstimo de ID: " + id);
@@ -181,10 +184,12 @@ public class EmprestimoService {
         if (emprestimoOptional.isPresent()) {
             Emprestimo emprestimo = emprestimoOptional.get();
 
+            IDevolucaoStrategy devolucaoStrategy = strategyFactory.getDevolucaoStrategy(emprestimo.getProduto());
+            ICalculoFinalStrategy calculoFinalStrategy = strategyFactory.getCalculoFinalStrategy(emprestimo.getProduto());
+
             if(devolucaoStrategy.isReturned(emprestimo)){
                 if(emprestimo.getValorFinal() == 0) {
                     if (devolucaoStrategy.wasReturnedLate(emprestimo)) {
-                        System.out.println("Atrasado");
                         float valorFinal = calculoFinalStrategy.calculateFinalValueLate(emprestimo);
                         emprestimo.setValorFinal(valorFinal);
                         return emprestimoRepository.save(emprestimo);

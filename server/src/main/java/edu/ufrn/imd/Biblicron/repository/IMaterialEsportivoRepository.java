@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface IMaterialEsportivoRepository extends JpaRepository<MaterialEsportivo, Long> {
 
+    Optional<MaterialEsportivo> findByNomeProduto(String nomeProduto);
 }

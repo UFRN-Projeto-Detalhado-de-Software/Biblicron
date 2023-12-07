@@ -107,12 +107,12 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{id}/sugestoes")
+    /*@GetMapping("/{id}/sugestoes")
     public ResponseEntity<Object> generateSugestoesById(@PathVariable(value = "id") Long id){
         Optional<User> userOptional = userService.findById(id);
         if(!userOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(userService.generateSugestoesById(id));
-    }
+    }*/
 }

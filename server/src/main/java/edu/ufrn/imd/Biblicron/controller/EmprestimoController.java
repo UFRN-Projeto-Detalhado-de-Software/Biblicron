@@ -28,11 +28,11 @@ public class EmprestimoController {
 
     @PostMapping("/realizar")
     public ResponseEntity<Object> realizarEmprestimo(@RequestBody @Valid EmprestimoRequestDto emprestimoRequestDTO) {
-        String nomeLivro = emprestimoRequestDTO.getNomeLivro();
+        String nomeProduto = emprestimoRequestDTO.getNomeProduto();
         String nomeUsuario = emprestimoRequestDTO.getNomeUsuario();
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(emprestimoService.realizarEmprestimo(nomeLivro, nomeUsuario));
+            return ResponseEntity.status(HttpStatus.CREATED).body(emprestimoService.realizarEmprestimo(nomeProduto, nomeUsuario));
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }

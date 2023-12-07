@@ -58,29 +58,29 @@ public class LivroController {
     public ResponseEntity<Object> findLivroById(@PathVariable(value = "id") Long id){
         Optional<Livro> livroOptional = livroService.findById(id);
         if(!livroOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(livroOptional.get());
     }
 
-    @GetMapping("/{id}/sugestoes")
+    /*@GetMapping("/{id}/sugestoes")
     public ResponseEntity<Object> generateSugestoesById(@PathVariable(value = "id") Long id){
         Optional<Livro> livroOptional = livroService.findById(id);
         if(!livroOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(livroService.generateSugestoesById(id));
-    }
+    }*/
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> deleteLivro(@PathVariable(value = "id") Long id){
         Optional<Livro> livroOptional = livroService.findById(id);
         if(!livroOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
         try{
             livroService.delete(livroOptional.get());
-            return ResponseEntity.status(HttpStatus.OK).body("Book of id " + id + " deleted successfully.");
+            return ResponseEntity.status(HttpStatus.OK).body("Produto de id:  " + id + " deletado com sucesso.");
         } catch (IllegalStateException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
@@ -100,6 +100,7 @@ public class LivroController {
 
         // Configure os gêneros do livro
         livro.setGeneros(livroDto.getGeneros());
+        livro.setNomeProduto(livroDto.getTitulo());
 
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(livroService.update(livro));
