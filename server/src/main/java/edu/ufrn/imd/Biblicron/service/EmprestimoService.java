@@ -54,7 +54,7 @@ public class EmprestimoService {
 
         Optional<Produto> produto = produtoRepository.findByNomeProduto(nomeProduto);
         if(produto.isEmpty()){
-            errosLog.add("Not Found: Livro não encontrado com o título: " + nomeProduto);
+            errosLog.add("Not Found: Produto não encontrado com o nome: " + nomeProduto);
         }
 
         Optional<User> usuario = userRepository.findByUsername(nomeUsuario);
