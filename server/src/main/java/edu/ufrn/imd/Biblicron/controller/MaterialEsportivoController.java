@@ -31,16 +31,8 @@ public class MaterialEsportivoController {
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody @Valid MaterialEsportivo materialEsportivo){
-        var materialEsportivoLocal = new MaterialEsportivo();
-
         try{
-            BeanUtils.copyProperties(materialEsportivoLocal, materialEsportivo);
-        } catch (InvocationTargetException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-
-        try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(materialEsportivoService.save(materialEsportivoLocal));
+            return ResponseEntity.status(HttpStatus.CREATED).body(materialEsportivoService.save(materialEsportivo));
         }
         catch (IllegalStateException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
@@ -62,7 +54,7 @@ public class MaterialEsportivoController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Object> deleteLivro(@PathVariable(value = "id") Long id){
+    public ResponseEntity<Object> deleteMaterialEsportivo(@PathVariable(value = "id") Long id){
         Optional<MaterialEsportivo> materialEsportivoOptional = materialEsportivoService.findById(id);
         if(!materialEsportivoOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");

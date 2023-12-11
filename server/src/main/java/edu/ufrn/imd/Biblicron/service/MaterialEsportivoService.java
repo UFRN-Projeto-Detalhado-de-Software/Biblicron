@@ -43,7 +43,7 @@ public class MaterialEsportivoService extends ProdutoService<MaterialEsportivo> 
         if(materialEsportivo.getMarca() == null){
             errorsLog.add("Length required: Material esportivo precisa ter uma marca");
         }
-        if(materialEsportivo.getMarca().length() > 255){
+        if (materialEsportivo.getMarca() != null && materialEsportivo.getMarca().length() > 255) {
             errorsLog.add("Length required: Marca precisa ter menos de 255 caracteres");
         }
 
