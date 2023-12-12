@@ -29,7 +29,7 @@ export class PaginaEmprestimosCadastroComponent implements OnInit{
   ) {
     this.emprestimo = new Emprestimo();
     this.emprestimoForm = this.fb.group({
-      nomeLivro: ['', Validators.required],
+      nomeProduto: ['', Validators.required],
       nomeUsuario: ['', Validators.required],
     });
   }
@@ -42,7 +42,7 @@ export class PaginaEmprestimosCadastroComponent implements OnInit{
   updateForm(emprestimo: Emprestimo) {
     this.emprestimoForm.patchValue({
       id: emprestimo.id,
-      nomeLivro: emprestimo.nomeLivro,
+      nomeProduto: emprestimo.nomeProduto,
       nomeUsuario: emprestimo.nomeUsuario,
     });
 

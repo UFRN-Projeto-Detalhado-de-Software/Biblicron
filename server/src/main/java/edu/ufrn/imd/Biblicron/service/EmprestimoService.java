@@ -27,7 +27,7 @@ public class EmprestimoService {
     private final IUserRepository userRepository;
     private final IStrategyFactory strategyFactory;
 
-    public EmprestimoService(IEmprestimoRepository emprestimoRepository, ILivroRepository livroRepository, IProdutoRepository produtoRepository, IUserRepository userRepository, IStrategyFactory strategyFactory) {
+    public EmprestimoService(IEmprestimoRepository emprestimoRepository, IProdutoRepository produtoRepository, IUserRepository userRepository, IStrategyFactory strategyFactory) {
         this.emprestimoRepository = emprestimoRepository;
         this.produtoRepository = produtoRepository;
         this.userRepository = userRepository;

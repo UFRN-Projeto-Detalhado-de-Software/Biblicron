@@ -146,7 +146,7 @@ export class PaginaEmprestimosComponent implements OnInit{
   calcularValorFinal(event: Event, item: Emprestimo) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: 'Tem certeza que calcular o valor final?',
+      message: 'Tem certeza que deseja calcular o valor final?',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Sim',
       rejectLabel: 'Não',

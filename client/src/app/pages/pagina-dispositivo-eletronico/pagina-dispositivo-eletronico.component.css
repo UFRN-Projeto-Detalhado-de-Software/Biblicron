@@ -1,0 +1,96 @@
+.container{
+  display: flex;
+  margin-left: 190px;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.form-table{
+  margin: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 70%;
+  min-width: 500px;
+}
+
+.page-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.addButton {
+  font-family: 'Poppins', sans-serif;
+  background-color: #357808;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.addButton:hover {
+  background-color: #1976d2;
+}
+
+.separator {
+  height: 2px;
+  background-color: #ddd;
+  margin: 20px 0;
+}
+
+.button{
+  width: 50px;
+}
+
+.styled-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.table-header {
+  background-color: #357808;
+  color: #ffffff;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+}
+
+.table-row{
+  border-bottom: 1px solid #dddddd;
+}
+
+.table-row:nth-of-type(even) {
+  background-color: rgba(114, 114, 114, 0.07);
+}
+
+
+.edit-button, .delete-button {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 5px 10px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.edit-button:hover, .delete-button:hover {
+  background-color: #6fa9d6;
+}

@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Tamanho {
 
-    PP("P"),
+    PP("PP"),
     P("P"),
     M("M"),
     G("G"),

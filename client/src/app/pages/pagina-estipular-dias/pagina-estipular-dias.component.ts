@@ -36,7 +36,7 @@ export class PaginaEstipularDiasComponent {
   initForm(): void{
     this.estipularForm = this.fb.group({
       id: [null],
-      nomeLivro: ['', Validators.required],
+      nomeProduto: ['', Validators.required],
       parametro: [Validators.required],
     });
   }

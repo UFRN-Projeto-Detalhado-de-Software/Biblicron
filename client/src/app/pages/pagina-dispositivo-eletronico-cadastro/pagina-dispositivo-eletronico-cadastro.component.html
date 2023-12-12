@@ -1,0 +1,81 @@
+<body>
+<div class="container">
+  <div class="card mb-5 mb-xl-10">
+    <div class="card-header border-0">
+      <div class="card-title m-0">
+        <h3 class="fw-bolder m-0">Cadastro de Material Esportivo</h3>
+      </div>
+    </div>
+    <div id="kt_account_profile_details" class="collapse show">
+      <form class="form" [formGroup]="dispositivoEletronicoForm" novalidate="novalidate">
+        <div class="card-body border-top p-9" >
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Nome Produto
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="nomeProduto" type="text" id="nomeProduto" placeholder="Informe o nome do produto">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Marca
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="marca" type="text" id="marca" placeholder="Informe a marca do produto">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Modelo
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="modelo" type="text" id="modelo" placeholder="Informe o modelo do produto">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Serial Number
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="serialNumber" type="text" id="serialNumber" placeholder="Informe o Serial Number do produto">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Quantidade
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="quantidade" type="number" id="quantidade" placeholder="Informe a quantidade de produtos" required min="1">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Quantidade Disponível
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="quantidadeDisponivel" type="number" id="quantidadeDisponivel" placeholder="Informe a quantidade disponível" required min="1">
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6">
+              Valor
+            </label>
+            <div class="col-lg-8 fv-row">
+              <input formControlName="valor" type="number" id="valor" placeholder="Informe o valor" required min="1">
+            </div>
+          </div>
+        </div>
+        <div class="card-footer d-flex justify-content-end py-6 px-9">
+          <button title="Botão para submeter formulário" type="button" class="btn button btn-primary"
+                  (click)="submit()">
+            <ng-container >Salvar Produto</ng-container>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+<p-toast [life]="7000"></p-toast>
+

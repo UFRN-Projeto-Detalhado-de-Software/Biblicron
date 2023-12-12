@@ -1,6 +1,6 @@
 export class Estipular{
 
-  nomeLivro: string = '';
+  nomeProduto: string = '';
   parametro: number = 0;
 
   constructor(value: Object = {}) {

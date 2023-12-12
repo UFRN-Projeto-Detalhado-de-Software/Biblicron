@@ -1,0 +1,58 @@
+<div class="container">
+  <p-confirmPopup
+    [style]="{
+        'width': '200px',
+        'font-family': 'Poppins',
+        'padding': '5px',
+        'font-size': '14px',
+        'border-radius': '9px',
+        'background-color': 'white',
+        'color': 'black',
+        'box-shadow': '0 4px 6px rgba(0, 0, 0, 0.1)'
+    }">
+  </p-confirmPopup>
+
+  <div class="form-table">
+    <div class="page-title">
+      Listagem de Dispositivos Eletrônicos
+      <button class="addButton" (click)="NavigateOnClick()">Adicionar</button>
+    </div>
+    <div class="separator"></div>
+    <div class="table-responsive styled-table" style="margin-bottom: 100px; max-height: 600px; overflow-y: auto;">
+      <p-table class="" dataKey="id" [value]="listaDispositivoEletronico" [lazy]="true" [rowHover]="true" [lazyLoadOnInit]="false" (onLazyLoad)="paginacao($event)"
+               [rows]="size" [totalRecords]="totalRecords" [showCurrentPageReport]="true" (onPage)="onPageChange($event)"
+               [globalFilterFields]="['nomeProduto', 'marca', 'quantidadeDisponivel']">
+        <ng-template pTemplate="header">
+          <tr class="table-header">
+            <th pSortableColumn="nomeProduto"> Nome do Produto <p-sortIcon field="nomeProduto"></p-sortIcon></th>
+            <th pSortableColumn="marca"> Marca <p-sortIcon field="marca"></p-sortIcon></th>
+            <th pSortableColumn="quantidadeDisponivel"> Quantidade Disponível <p-sortIcon field="quantidadeDisponivel"></p-sortIcon></th>
+            <th pSortableColumn="valor"> Valor <p-sortIcon field="valor"></p-sortIcon></th>
+            <th> Ações </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr class="table-row">
+            <td>{{ item.nomeProduto}}</td>
+            <td>{{ item.marca }}</td>
+            <td>{{ item.quantidadeDisponivel }}</td>
+            <td>{{ item.valor }}</td>
+            <td>
+              <button class="pi pi-pencil btn btn-sm btn-icon btn-active-light-primary edit-button"
+                      (click)="editItem(item)"> Editar
+              </button>
+              <button class="pi pi-trash btn btn-sm btn-icon btn-active-light-primary delete-button"
+                      (click)="confirmarRemocao($event, item)"> Excluir
+              </button>
+
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <div class="flex-auto">
+      <p-paginator (onPageChange)="onPageChange($event)" [rows]="size" [totalRecords]="totalRecords"></p-paginator>
+    </div>
+  </div>
+</div>
+<p-toast></p-toast>

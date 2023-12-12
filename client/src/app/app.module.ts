@@ -24,6 +24,10 @@ import {ToastModule} from "primeng/toast";
 import { PaginaLoginComponent } from './pages/pagina-login/pagina-login.component';
 import { PaginaEstipularPaginasComponent } from './pages/pagina-estipular-paginas/pagina-estipular-paginas.component';
 import { PaginaEstipularDiasComponent } from './pages/pagina-estipular-dias/pagina-estipular-dias.component';
+import { PaginaMaterialEsportivoComponent } from './pages/pagina-material-esportivo/pagina-material-esportivo.component';
+import { PaginaMaterialEsportivoCadastroComponent } from './pages/pagina-material-esportivo-cadastro/pagina-material-esportivo-cadastro.component';
+import { PaginaDispositivoEletronicoComponent } from './pages/pagina-dispositivo-eletronico/pagina-dispositivo-eletronico.component';
+import { PaginaDispositivoEletronicoCadastroComponent } from './pages/pagina-dispositivo-eletronico-cadastro/pagina-dispositivo-eletronico-cadastro.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +44,10 @@ import { PaginaEstipularDiasComponent } from './pages/pagina-estipular-dias/pagi
     PaginaLoginComponent,
     PaginaEstipularPaginasComponent,
     PaginaEstipularDiasComponent,
+    PaginaMaterialEsportivoComponent,
+    PaginaMaterialEsportivoCadastroComponent,
+    PaginaDispositivoEletronicoComponent,
+    PaginaDispositivoEletronicoCadastroComponent,
   ],
   imports: [
     BrowserModule,
